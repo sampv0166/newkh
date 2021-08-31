@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
 /// Scroll
@@ -9,18 +9,29 @@ import profile from "../../../images/profile/17.jpg";
 import avatar from "../../../images/avatar/1.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../actions/userActions";
+import { listProducts, searchProducts } from "../../../actions/productActions";
 
-const Header = ({ onNote, toggle, onProfile, onNotification, onBox , history }) => {
+const Header = ({
+  onNote,
+  toggle,
+  onProfile,
+  onNotification,
+  onBox,
+  history,
+}) => {
+  const [keyword, setKeyword] = useState(null);
+
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const logoutHandler = () => {
-    dispatch(logout(dispatch , history));
+    dispatch(logout(dispatch, history));
   };
 
   var path = window.location.pathname.split("/");
+
   var name = path[path.length - 1].split("-");
   var filterName = name.length >= 3 ? name.filter((n, i) => i > 0) : name;
   var finalName = filterName.includes("app")
@@ -68,9 +79,17 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox , history }) 
                     type="text"
                     className="form-control"
                     placeholder="Search here"
+                    onChange={(e) => {
+                      setKeyword(e.target.value);
+                    }}
                   />
                   <div className="input-group-append">
-                    <span className="input-group-text">
+                    <span
+                      className="input-group-text"
+                      onClick={() => {
+                        dispatch(searchProducts(0, keyword));
+                      }}
+                    >
                       <svg
                         width={20}
                         height={20}

@@ -75,6 +75,7 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
       ) : (
         <Fragment>
           <div className="d-flex justify-content-end">
+            
             <div className="basic-dropdown my-3">
               <Dropdown>
                 <Dropdown.Toggle variant="secondary">

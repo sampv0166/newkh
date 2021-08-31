@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { BASE_URL } from '../constants/Globals';
+import { BASE_URL } from "../constants/Globals";
 
 import {
   SINGLE_VARIATION_CREATE_FAIL,
@@ -21,9 +21,9 @@ import {
   VARIATION_UPDATE_FAIL,
   VARIATION_UPDATE_REQUEST,
   VARIATION_UPDATE_SUCCESS,
-} from '../constants/variationConstants';
+} from "../constants/variationConstants";
 
-import { listProductDetails } from './productActions';
+import { listProductDetails } from "./productActions";
 
 export const createVariation =
   (dispatch, formdata, ProductVariationList, hasVariant, data) => async () => {
@@ -33,11 +33,11 @@ export const createVariation =
         type: VARIATION_CREATE_REQUEST,
       });
 
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${userInfo.success.token}`,
         },
       };
@@ -48,18 +48,18 @@ export const createVariation =
 
         let variationformdata = new FormData();
         let images;
-        variationformdata.set('product_id', data.id);
-        variationformdata.set('price', variations.price);
-        variationformdata.set('offerprice', variations.offerprice);
-        variationformdata.set('stocks', variations.stocks);
-        variationformdata.set('color_name', variations.color_name);
-        variationformdata.set('color_value', variations.color_value);
+        variationformdata.set("product_id", data.id);
+        variationformdata.set("price", variations.price);
+        variationformdata.set("offerprice", variations.offerprice);
+        variationformdata.set("stocks", variations.stocks);
+        variationformdata.set("color_name", variations.color_name);
+        variationformdata.set("color_value", variations.color_value);
 
         variations.hasoffer === true
-          ? variationformdata.set('hasoffer', 1)
-          : variationformdata.set('hasoffer', 0);
+          ? variationformdata.set("hasoffer", 1)
+          : variationformdata.set("hasoffer", 0);
 
-        variationformdata.set('size_value', variations.size_value);
+        variationformdata.set("size_value", variations.size_value);
 
         if (hasVariant) {
           for (var i = 0; i < arr.length; i++) {
@@ -105,10 +105,10 @@ export const createSingleVariation =
       dispatch({
         type: SINGLE_VARIATION_CREATE_REQUEST,
       });
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${userInfo.success.token}`,
         },
       };
@@ -139,43 +139,56 @@ export const createSingleVariation =
     }
   };
 
-export const updateVariation = (dispatch, formdata, productId) => async () => {
-  try {
-    dispatch({
-      type: VARIATION_UPDATE_REQUEST,
-    });
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${userInfo.success.token}`,
-      },
-    };
-    const { data } = axios.post(
-      `${BASE_URL}api/v2/admin/variation`,
-      formdata,
-      config
-    );
+export const updateVariation =
+  (dispatch, formdata, productId, deleteimageurl, varId) => async () => {
+    try {
+      dispatch({
+        type: VARIATION_UPDATE_REQUEST,
+      });
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.success.token}`,
+        },
+      };
 
-    dispatch({
-      type: VARIATION_UPDATE_SUCCESS,
-      payload: data,
-    });
-    dispatch(listProductDetails(productId));
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    /*if (message === 'Not authorized, token failed') {
+      for (var value of formdata.values()) {
+        console.log(value);
+      }
+
+      const { data } = axios.post(
+        `${BASE_URL}api/v2/admin/variation`,
+        formdata,
+        config
+      );
+
+      if (deleteimageurl.length > 0) {
+        deleteimageurl.map((url) => {
+          dispatch(deleteVariationImage(url, varId, productId));
+        });
+      }
+
+      dispatch({
+        type: VARIATION_UPDATE_SUCCESS,
+        payload: data,
+      });
+
+      dispatch(listProductDetails(productId));
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      /*if (message === 'Not authorized, token failed') {
       dispatch(logout())
     }*/
-    dispatch({
-      type: VARIATION_UPDATE_FAIL,
-      payload: message,
-    });
-  }
-};
+      dispatch({
+        type: VARIATION_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
 
 export const deleteVariation = (id) => async (dispatch, getState) => {
   try {
@@ -183,11 +196,11 @@ export const deleteVariation = (id) => async (dispatch, getState) => {
       type: VARIATION_DELETE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -202,7 +215,7 @@ export const deleteVariation = (id) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === 'Not authorized, token failed') {
+    if (message === "Not authorized, token failed") {
       ///dispatch(logout())
     }
     dispatch({
@@ -219,19 +232,19 @@ export const deleteVariationImage =
         type: VARIATION_IMAGE_DELETE_REQUEST,
       });
 
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.success.token}`,
         },
       };
 
       let formdata = new FormData();
 
-      formdata.set('url', url);
-      formdata.set('variation_id', varId);
+      formdata.set("url", url);
+      formdata.set("variation_id", varId);
 
       await axios.post(
         `${BASE_URL}api/v2/admin/deletevariationimage`,
@@ -242,12 +255,13 @@ export const deleteVariationImage =
       dispatch({
         type: VARIATION_IMAGE_DELETE_SUCCESS,
       });
+
     } catch (error) {
       const message =
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
-      if (message === 'Not authorized, token failed') {
+      if (message === "Not authorized, token failed") {
         ///dispatch(logout())
       }
       dispatch({
@@ -262,10 +276,10 @@ export const insertSingleVariationImage = (dispatch, formdata) => async () => {
     dispatch({
       type: VARIATION_IMAGE_REQUEST,
     });
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
