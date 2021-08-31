@@ -14,7 +14,10 @@ import {
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
-} from '../constants/productConstants';
+  SEARCH_PRODUCT_FAIL,
+  SEARCH_PRODUCT_REQUEST,
+  SEARCH_PRODUCT_SUCCESS,
+} from "../constants/productConstants";
 
 export const productListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
@@ -29,6 +32,25 @@ export const productListReducer = (state = { products: [] }, action) => {
         page: action.payload.current_page,
       };
     case PRODUCT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const searchProductReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case SEARCH_PRODUCT_REQUEST:
+      return { loading: true, products: [] };
+
+    case SEARCH_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.data,
+        pages: action.payload.last_page,
+        page: action.payload.current_page,
+      };
+    case SEARCH_PRODUCT_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

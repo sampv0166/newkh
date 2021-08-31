@@ -13,12 +13,15 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  SEARCH_PRODUCT_FAIL,
+  SEARCH_PRODUCT_REQUEST,
+  SEARCH_PRODUCT_SUCCESS,
 } from "../constants/productConstants";
 import { createVariation, updateVariation } from "./variationActions";
 
 export const searchProducts = (keyword) => async (dispatch) => {
   try {
-    dispatch({ type: PRODUCT_LIST_REQUEST });
+    dispatch({ type: SEARCH_PRODUCT_REQUEST });
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
@@ -35,12 +38,12 @@ export const searchProducts = (keyword) => async (dispatch) => {
     console.log(data);
 
     dispatch({
-      type: PRODUCT_LIST_SUCCESS,
+      type: SEARCH_PRODUCT_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: PRODUCT_LIST_FAIL,
+      type: SEARCH_PRODUCT_FAIL,
       payload:
         error.response && error.response.data.error
           ? error.response.data.error
@@ -61,14 +64,13 @@ export const listProducts = (pageNumber, keyword) => async (dispatch) => {
     };
     let data2;
 
- 
-      const { data } = await axios.get(
-        `${BASE_URL}api/v2/admin/product?page=${pageNumber}`,
-        config
-      );
+    const { data } = await axios.get(
+      `${BASE_URL}api/v2/admin/product?search=${keyword}&page=${pageNumber}`,
+      config
+    );
 
-      data2 = data;
- 
+    data2 = data;
+
     console.log(data2);
 
     dispatch({

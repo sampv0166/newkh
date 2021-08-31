@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 /// Scroll
 import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -11,15 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../actions/userActions";
 import { listProducts, searchProducts } from "../../../actions/productActions";
 
-const Header = ({
-  onNote,
-  toggle,
-  onProfile,
-  onNotification,
-  onBox,
-  history,
-}) => {
-  const [keyword, setKeyword] = useState(null);
+const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
+  const [keyword, setKeyword] = useState("");
+
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -80,14 +75,17 @@ const Header = ({
                     className="form-control"
                     placeholder="Search here"
                     onChange={(e) => {
+
                       setKeyword(e.target.value);
+                      
                     }}
                   />
                   <div className="input-group-append">
                     <span
                       className="input-group-text"
                       onClick={() => {
-                        dispatch(searchProducts(0, keyword));
+                        console.log(keyword);
+                        dispatch(listProducts(1, keyword));
                       }}
                     >
                       <svg

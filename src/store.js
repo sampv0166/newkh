@@ -15,6 +15,7 @@ import {
   productDetailsReducer,
   productListReducer,
   productUpdateReducer,
+  searchProductReducer,
 } from './reducers/productReducers';
 import {
   categoryCreateReducer,
@@ -48,6 +49,7 @@ const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   productDelete: productDeleteReducer,
+  searchProducts:searchProductReducer , 
   userLogin: userLoginReducer,
 
   shopList: shopReducer,

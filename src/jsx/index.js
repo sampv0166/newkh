@@ -261,6 +261,20 @@ const Markup = ({ history }) => {
 
               <PrivateRoute
                 exact
+                path="/ecom-product-grid/page/:pageNumber"
+                render={({ match, history, location }) => (
+                  <ProductGrid
+                    match={match}
+                    history={history}
+                    location={location}
+                    hasVariant={hasVariant}
+                    setHasVariant={setHasVariant}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
                 path="/ecom/product-edit/:id"
                 render={({ match, history, location }) => (
                   <AddProductScreen
