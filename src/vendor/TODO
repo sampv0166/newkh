@@ -49,3 +49,6 @@ If confirmed :ready for shipment - > order confirmed
 If rejected : order shipped -> order rejected
 If shipping there are not messages
 
+
+{{baseurl}}/api/v2/admin/adminsearch?search=ab&type=shops
+
