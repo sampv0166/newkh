@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductDetails } from "../../actions/productActions";
@@ -46,6 +46,22 @@ const VariationTable = ({
     }
   };
 
+  const renderVariationImages = (image) => {
+    return (
+      <span>
+        <Card.Img
+          style={{
+            height: "50px",
+            width: "50px",
+            objectFit: "contain",
+          }}
+          src={image}
+          variant="top"
+        />
+      </span>
+    );
+  };
+
   const productDetails = useSelector((state) => state.productDetails);
   const {
     product,
@@ -53,6 +69,8 @@ const VariationTable = ({
     error: errorproductDetails,
     success: successproductDetails,
   } = productDetails;
+
+  useEffect(() => {}, [ProductVariationList, productId]);
 
   return (
     <>
@@ -91,20 +109,15 @@ const VariationTable = ({
 
                             {productId ? (
                               <td>
-                             
-                 
-                                    <span>
-                                      <Card.Img
-                                        style={{
-                                          height: "50px",
-                                          width: "50px",
-                                          objectFit: "contain",
-                                        }}
-                                        src={item.images[0]}
-                                        variant="top"
-                                      />
-                                    </span>
-                     
+                                {item.images.map((image) => {
+                                  if (
+                                    image ===
+                                    "https://khaymatapi.mvp-apps.ae/storage/"
+                                  ) {
+                                  } else {
+                                    renderVariationImages(image);
+                                  }
+                                })}
                               </td>
                             ) : (
                               ""

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   USER_CREATE_FAIL,
   USER_CREATE_REQUEST,
@@ -20,9 +20,10 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
-} from '../constants/userConstants';
+} from "../constants/userConstants";
 
-import { BASE_URL } from '../constants/Globals';
+import { BASE_URL } from "../constants/Globals";
+import { createPermission } from "./permissionActions";
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -32,7 +33,7 @@ export const login = (email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
@@ -47,7 +48,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -67,7 +68,7 @@ export const register = (name, email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
@@ -87,7 +88,7 @@ export const register = (name, email, password) => async (dispatch) => {
     //   payload: data,
     // })
 
-    document.location.href = '/page-login';
+    document.location.href = "/page-login";
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -100,20 +101,20 @@ export const register = (name, email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch, history) => {
-  localStorage.removeItem('userInfo');
+  localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   //dispatch({ type: USER_DETAILS_RESET })
 
-  document.location.href = '/page-login';
+  document.location.href = "/page-login";
 };
 
 export const listUsers = (pageNumber) => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -145,11 +146,11 @@ export const deleteUser = (formdata) => async (dispatch, getState) => {
       type: USER_DELETE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -166,7 +167,7 @@ export const deleteUser = (formdata) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === 'Not authorized, token failed') {
+    if (message === "Not authorized, token failed") {
       ///dispatch(logout())
     }
     dispatch({
@@ -180,7 +181,7 @@ export const listUserDetails = (shopId) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
@@ -189,7 +190,7 @@ export const listUserDetails = (shopId) => async (dispatch) => {
     };
 
     const { data } = await axios.get(
-      `${BASE_URL}api/v2/public/${shopId}`,
+      `${BASE_URL}api/v2/admin/${shopId}`,
       config
     );
 
@@ -214,11 +215,12 @@ export const createUser = (dispatch, formdata) => async () => {
       type: USER_CREATE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -228,6 +230,11 @@ export const createUser = (dispatch, formdata) => async () => {
       formdata,
       config
     );
+
+    formdata.delete("id");
+    formdata.set("user_id", data.success.id);
+
+    dispatch(createPermission(dispatch, formdata));
 
     dispatch({
       type: USER_CREATE_SUCCESS,

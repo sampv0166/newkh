@@ -90,7 +90,6 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     description_en: Yup.string().required("Required"),
     category_id: Yup.number().required("Required"),
     price: Yup.number().required("Required"),
-    offerprice: Yup.number(),
     stocks: Yup.number().required("Required"),
   });
   const userinfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -113,12 +112,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
         Array.from(e.target.files).forEach((file) => {
           formikFileArray.push(file);
         });
-
-        let formdata = new FormData();
-        formdata.append("var_id", varId);
-        formdata.append("images", formikFileArray);
-
-        dispatch(insertSingleVariationImage(dispatch, formdata));
+        formik.setFieldValue("images", formikFileArray);
       } else {
       }
     } else {
@@ -190,7 +184,8 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     formik
   ) => {
     e.preventDefault();
-    if (formik.values.image.length === 1) {
+
+    if (selectedFiles.length === 1) {
       alert("atleast one image required");
       return;
     }
@@ -203,13 +198,12 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
       result = result.replace(url.toString(), "");
       result = result.replace("://www.", "");
       result = result.replace("https://", "");
-      dispatch(deleteVariationImage(result, varId));
     }
 
     setSelectedFiles(source);
     const files = Array.from(formikFileArray).filter((file, i) => index !== i);
     formik.setFieldValue("images", files);
-    formik.setFieldValue("image", source);
+    formik.setFieldValue("image", files);
     setFormikFileArray(files);
   };
 
@@ -281,6 +275,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                   offer.checked === true ? (d = false) : (d = true);
                   setOffer({ checked: d });
                   formik.setFieldValue("hasoffer", d);
+                  formik.setFieldValue("offerprice", formik.values.price);
                 }}
               />
 
@@ -466,6 +461,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
       ) {
         setVarId(product[0].variations[0].id);
         setSelectedFiles(product[0].variations[0].images);
+        setFormikFileArray(product[0].variations[0].images);
       } else {
         if (
           product[0].variations.length > 0 &&
@@ -482,13 +478,15 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
       }
       setProductVariationList(product[0].variations);
     }
+    console.log(formikFileArray);
+    console.log(selectedFiles);
   }, [dispatch, productId, product]);
 
   useLayoutEffect(() => {
-    if (product.length === 0) {
+    if (productId) {
       dispatch(listProductDetails(productId));
-      
     }
+    console.log(selectedFiles);
   }, [dispatch, productId]);
 
   const setArr = (arr, values) => {
@@ -564,26 +562,26 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
       : formdata.append("bestseller", 0);
   };
 
-  const handleformdata = (formik, resetForm) => {
-    if (formik.isValid) {
-      let arr = new Array(1);
-      let formdata = new FormData();
-
-      setArr(arr, formik.values);
-      setFormData(formdata, formik.values);
-      if (hasVariant.checked === true) {
-        handleSubmit(
-          formdata,
-          ProductVariationList,
-          resetForm,
-          formik.values,
-          formik
-        );
-      } else {
-        handleSubmit(formdata, arr, resetForm, formik.values, formik);
+  const handleformdata = (values, resetForm) => {
+    if (offer.checked) {
+      if (
+        (values.offerprice && values.offerprice) < 0 ||
+        (values.offerprice && values.offerprice) > values.price
+      ) {
+        alert("offerprice is incorrect");
+        return;
       }
-      formik.submitForm();
+    }
+
+    let arr = new Array(1);
+    let formdata = new FormData();
+
+    setArr(arr, values);
+    setFormData(formdata, values);
+    if (hasVariant.checked === true) {
+      handleSubmit(formdata, ProductVariationList, resetForm, values);
     } else {
+      handleSubmit(formdata, arr, resetForm, values);
     }
   };
 
@@ -735,6 +733,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                 product.length === 0 || product[0].variations.length === 0
                   ? 0
                   : product[0].variations[0].offerprice,
+
               stocks:
                 product.length === 0 || product[0].variations.length === 0
                   ? ""
@@ -742,8 +741,9 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
             }}
             innerRef={submitform}
             validationSchema={validate()}
-            validateOnMount={true}
-            onSubmit={() => {}}
+            onSubmit={(values, { resetForm }) => {
+              handleformdata(values, 1);
+            }}
           >
             {(formik) => (
               <Form>
@@ -922,12 +922,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                     {console.log(formik.values)}
                     <button
                       className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
-                      type="button"
-                      onClick={(e) => {
-                        if (formik.isValid) {
-                          handleformdata(formik, 3);
-                        }
-                      }}
+                      type="submit"
                     >
                       {productId ? "Update Product" : "Save Product"}
                     </button>

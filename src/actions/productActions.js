@@ -19,72 +19,75 @@ import {
 } from "../constants/productConstants";
 import { createVariation, updateVariation } from "./variationActions";
 
-export const searchProducts = (keyword) => async (dispatch) => {
-  try {
-    dispatch({ type: SEARCH_PRODUCT_REQUEST });
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.success.token}`,
-      },
-    };
-
-    const { data } = await axios.get(
-      `${BASE_URL}api/v2/admin/product?search=${keyword}`,
-      config
-    );
-
-    console.log(data);
-
-    dispatch({
-      type: SEARCH_PRODUCT_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SEARCH_PRODUCT_FAIL,
-      payload:
-        error.response && error.response.data.error
-          ? error.response.data.error
-          : error.message,
-    });
-  }
-};
+export const searchProducts = (keyword) => async (dispatch) => {};
 
 export const listProducts = (pageNumber, keyword) => async (dispatch) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST });
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  console.log(keyword);
+  if (keyword === "" || keyword === undefined || keyword === null) {
+    try {
+      dispatch({ type: PRODUCT_LIST_REQUEST });
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.success.token}`,
-      },
-    };
-    let data2;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.success.token}`,
+        },
+      };
+      let data2;
 
-    const { data } = await axios.get(
-      `${BASE_URL}api/v2/admin/product?search=${keyword}&page=${pageNumber}`,
-      config
-    );
+      const { data } = await axios.get(
+        `${BASE_URL}api/v2/admin/product?page=${pageNumber}`,
+        config
+      );
 
-    data2 = data;
+      data2 = data;
 
-    console.log(data2);
+      console.log(data2);
 
-    dispatch({
-      type: PRODUCT_LIST_SUCCESS,
-      payload: data2,
-    });
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.error
-          ? error.response.data.error
-          : error.message,
-    });
+      dispatch({
+        type: PRODUCT_LIST_SUCCESS,
+        payload: data2,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_LIST_FAIL,
+        payload:
+          error.response && error.response.data.error
+            ? error.response.data.error
+            : error.message,
+      });
+    }
+  } else {
+    try {
+      dispatch({ type: PRODUCT_LIST_REQUEST });
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.success.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `${BASE_URL}api/v2/admin/product?search=${keyword}`,
+        config
+      );
+
+      console.log(data);
+
+      dispatch({
+        type: PRODUCT_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_LIST_FAIL,
+        payload:
+          error.response && error.response.data.error
+            ? error.response.data.error
+            : error.message,
+      });
+    }
   }
 };
 
@@ -225,7 +228,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
     };
 
     await axios.delete(`${BASE_URL}api/v2/admin/product/${id}`, config);
-
+    
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
     });

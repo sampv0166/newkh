@@ -100,10 +100,7 @@ export const createShop = (dispatch, formdata) => async () => {
       config
     );
 
-    formdata.delete("id");
-    formdata.set("user_id", data.id);
 
-    dispatch(createPermission(dispatch, formdata));
 
     dispatch({
       type: SHOP_CREATE_SUCCESS,

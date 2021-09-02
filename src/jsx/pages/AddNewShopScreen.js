@@ -325,40 +325,7 @@ const AddNewShopScreen = ({ match, history }) => {
                     </Row>
                   </div>
 
-                  <Row>
-                    <Col>
-                      <CheckboxGroup
-                        control="checkbox"
-                        label="Product Permissions"
-                        name="product"
-                        options={permissions}
-                      />
-                    </Col>
-                    <Col>
-                      <CheckboxGroup
-                        control="checkbox"
-                        label="Category Permissions"
-                        name="category"
-                        options={permissions}
-                      />
-                    </Col>
-                    <Col>
-                      <CheckboxGroup
-                        control="checkbox"
-                        label="Shop Permissions"
-                        name="shop"
-                        options={permissions}
-                      />
-                    </Col>
-                    <Col>
-                      <CheckboxGroup
-                        control="checkbox"
-                        label="Variation Permissions"
-                        name="variation"
-                        options={permissions}
-                      />
-                    </Col>
-                  </Row>
+                
                 </div>
               </Form>
             </div>

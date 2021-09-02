@@ -99,7 +99,7 @@ const UsersScreen = ({ history, match }) => {
                   {users.map((item, index) => (
                     <tr>
                       <td>
-                        <strong>542</strong>
+                        <strong>{item.id}</strong>
                       </td>
                       <td>
                         <div className="d-flex align-items-center">

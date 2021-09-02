@@ -357,6 +357,7 @@ const VariationOptions = ({
                               : (d = true);
                             sethasOffer({ checked: d });
                             formik.setFieldValue("hasoffer", d);
+                            formik.setFieldValue("offerprice", formik.values.price);
                           }}
                         />
 

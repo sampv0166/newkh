@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 /// Link
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 /// Scroll
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 /// Menu
-import MetisMenu from 'metismenujs';
+import MetisMenu from "metismenujs";
 
 ///
-import drump from '../../../images/card/drump.png';
-import { useLayoutEffect } from 'react';
-import { useSelector } from 'react-redux';
+import drump from "../../../images/card/drump.png";
+import { useLayoutEffect } from "react";
+import { useSelector } from "react-redux";
 
 const MM = (props) => {
   return (
@@ -26,14 +26,14 @@ const MM = (props) => {
 
 const SideBar = () => {
   useLayoutEffect(() => {
-    var btn = document.querySelector('.nav-control');
-    var aaa = document.querySelector('#main-wrapper');
+    var btn = document.querySelector(".nav-control");
+    var aaa = document.querySelector("#main-wrapper");
 
     function toggleFunc() {
-      return aaa.classList.toggle('menu-toggle');
+      return aaa.classList.toggle("menu-toggle");
     }
 
-    btn.addEventListener('click', toggleFunc);
+    btn.addEventListener("click", toggleFunc);
   }, []);
 
   const path = window.location.pathname;
@@ -43,72 +43,72 @@ const SideBar = () => {
 
   /// Active menu
   let deshBoard = [
-      '',
-      'workout-statistic',
-      'workout-plan',
-      'distance-map',
-      'diet-food-menu',
-      'personal-record',
+      "",
+      "workout-statistic",
+      "workout-plan",
+      "distance-map",
+      "diet-food-menu",
+      "personal-record",
     ],
     app = [
-      'app-profile',
-      'app-calender',
-      'email-compose',
-      'email-inbox',
-      'email-read',
-      'ecom-product-grid/page',
-      'ecom-product-list',
-      'ecom-product-list',
-      'ecom-product-order',
-      'ecom-checkout',
-      'ecom-invoice',
-      'ecom-customers',
+      "app-profile",
+      "app-calender",
+      "email-compose",
+      "email-inbox",
+      "email-read",
+      "ecom-product-grid/page",
+      "ecom-product-list",
+      "ecom-product-list",
+      "ecom-product-order",
+      "ecom-checkout",
+      "ecom-invoice",
+      "ecom-customers",
     ],
     charts = [
-      'chart-flot',
-      'chart-morris',
-      'chart-chartjs',
-      'chart-chartist',
-      'chart-sparkline',
-      'chart-peity',
+      "chart-flot",
+      "chart-morris",
+      "chart-chartjs",
+      "chart-chartist",
+      "chart-sparkline",
+      "chart-peity",
     ],
     bootstrap = [
-      'ui-accordion',
-      'ui-badge',
-      'ui-alert',
-      'ui-button',
-      'ui-modal',
-      'ui-button-group',
-      'ui-list-group',
-      'ui-media-object',
-      'ui-card',
-      'ui-carousel',
-      'ui-dropdown',
-      'ui-popover',
-      'ui-progressbar',
-      'ui-tab',
-      'ui-typography',
-      'ui-pagination',
-      'ui-grid',
+      "ui-accordion",
+      "ui-badge",
+      "ui-alert",
+      "ui-button",
+      "ui-modal",
+      "ui-button-group",
+      "ui-list-group",
+      "ui-media-object",
+      "ui-card",
+      "ui-carousel",
+      "ui-dropdown",
+      "ui-popover",
+      "ui-progressbar",
+      "ui-tab",
+      "ui-typography",
+      "ui-pagination",
+      "ui-grid",
     ],
     plugins = [
-      'uc-select2',
-      'uc-nestable',
-      'uc-sweetalert',
-      'uc-toastr',
-      'uc-jqvmap',
-      'uc-noui-slider',
+      "uc-select2",
+      "uc-nestable",
+      "uc-sweetalert",
+      "uc-toastr",
+      "uc-jqvmap",
+      "uc-noui-slider",
     ],
-    widget = ['widget'],
-    shop = ['shops'],
+    widget = ["widget"],
+    shop = ["shops"],
     forms = [
-      'form-element',
-      'form-wizard',
-      'form-editor-summernote',
-      'form-pickers',
-      'form-validation-jquery',
+      "form-element",
+      "form-wizard",
+      "form-editor-summernote",
+      "form-pickers",
+      "form-validation-jquery",
     ],
-    table = ['table-bootstrap-basic', 'table-datatable-basic'];
+    table = ["table-bootstrap-basic", "table-datatable-basic"];
 
   return (
     <div className="deznav">
@@ -116,7 +116,7 @@ const SideBar = () => {
         <MM className="metismenu" id="menu">
           <li
             className={`${
-              deshBoard.includes(path.slice(1)) ? 'mm-active' : ''
+              deshBoard.includes(path.slice(1)) ? "mm-active" : ""
             }`}
           >
             <Link className="has-arrow ai-icon" to="#" aria-expanded="false">
@@ -149,7 +149,7 @@ const SideBar = () => {
 
           <li
             className={`${
-              path.slice(1).includes('ecom-product-grid') ? 'mm-active' : ''
+              path.slice(1).includes("ecom-product-grid") ? "mm-active" : ""
             }`}
           >
             <Link
@@ -160,13 +160,10 @@ const SideBar = () => {
               <i className="flaticon-381-box"></i>
               <span className="nav-text">Products</span>
             </Link>
-
-
-
           </li>
 
           <li
-            className={`${path.slice(1).includes('shops') ? 'mm-active' : ''}`}
+            className={`${path.slice(1).includes("shops") ? "mm-active" : ""}`}
           >
             <Link
               to={`/shops/page/1`}
@@ -179,7 +176,7 @@ const SideBar = () => {
           </li>
 
           <li
-            className={`${path.slice(1).includes('orders') ? 'mm-active' : ''}`}
+            className={`${path.slice(1).includes("orders") ? "mm-active" : ""}`}
           >
             <Link
               to={`/orders/page/1`}
@@ -193,7 +190,7 @@ const SideBar = () => {
 
           <li
             className={`${
-              path.slice(1).includes('category') ? 'mm-active' : ''
+              path.slice(1).includes("category") ? "mm-active" : ""
             }`}
           >
             <Link to={`/category`} className="ai-icon" aria-expanded="false">
@@ -202,10 +199,10 @@ const SideBar = () => {
             </Link>
           </li>
 
-          {userInfo.user.typeofuser === 'S' ? (
+          {userInfo.user.typeofuser === "S" ? (
             <li
               className={`${
-                path.slice(1).includes('usersList') ? 'mm-active' : ''
+                path.slice(1).includes("usersList") ? "mm-active" : ""
               }`}
             >
               <Link
@@ -218,8 +215,25 @@ const SideBar = () => {
               </Link>
             </li>
           ) : (
-            ''
+            ""
           )}
+
+
+            <li
+              className={`${
+                path.slice(1).includes("usersList") ? "mm-active" : ""
+              }`}
+            >
+              <Link
+                to={`/usersList/page/1`}
+                className="ai-icon"
+                aria-expanded="false"
+              >
+                <i className="flaticon-381-user"></i>
+                <span className="nav-text">Customers</span>
+              </Link>
+            </li>
+
 
           {/*<li className={`${app.includes(path.slice(1)) ? "mm-active" : ""}`}>
             <Link className="has-arrow ai-icon" to="#" aria-expanded="false">

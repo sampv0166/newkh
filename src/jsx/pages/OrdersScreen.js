@@ -130,11 +130,7 @@ const OrdersScreen = ({ match, history }) => {
                           ''
                         )}
 
-                        {item.payment_status === 2 ? (
-                          <Badge variant="primary">shipping</Badge>
-                        ) : (
-                          ''
-                        )}
+      
 
                         {item.payment_status === 3 ? (
                           <Badge variant="danger">rejected</Badge>
@@ -234,16 +230,7 @@ const OrdersScreen = ({ match, history }) => {
                             >
                               confirmed
                             </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() => {
-                                let formdata = new FormData();
-                                formdata.set('order_id', item.id);
-                                formdata.set('status', 2);
-                                dispatch(updateOrderStatus(dispatch, formdata));
-                              }}
-                            >
-                              shipping
-                            </Dropdown.Item>
+         
                             <Dropdown.Item
                               onClick={() => {
                                 let formdata = new FormData();
