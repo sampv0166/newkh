@@ -1,5 +1,5 @@
-import React from 'react';
-import { Field, ErrorMessage } from 'formik';
+import React from "react";
+import { Field, ErrorMessage, FieldArray } from "formik";
 
 function CheckboxGroup(props) {
   const { label, name, options, ...rest } = props;
@@ -18,8 +18,9 @@ function CheckboxGroup(props) {
                     id={option.value}
                     {...field}
                     {...rest}
-                    value={option.value}
+                    checked={option.value}
                   />
+                  {console.log(rest)}
                   <label htmlFor={option.value}>{option.key}</label>
                 </div>
               </React.Fragment>

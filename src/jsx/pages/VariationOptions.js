@@ -154,7 +154,7 @@ const VariationOptions = ({
       result = result.replace("://www.", "");
       result = result.replace("https://", "");
       deleteimageurl.push(result);
-      console.log(deleteimageurl);
+ 
       //dispatch(deleteVariationImage(result, varId, productId));
     }
 
@@ -162,7 +162,7 @@ const VariationOptions = ({
     const files = Array.from(formikFileArray).filter((file, i) => index !== i);
     formik.setFieldValue("images", files);
     setFormikFileArray(files);
-    console.log(formikFileArray);
+
   };
 
   const addToVariationList = (formik) => {
@@ -201,7 +201,7 @@ const VariationOptions = ({
         formdata.append("product_id", productId);
 
         if (varId) {
-          console.log(formikFileArray);
+       
           for (var i = 0; i < formikFileArray.length; i++) {
             if (typeof formikFileArray[i] === "string") {
             } else {
@@ -302,7 +302,7 @@ const VariationOptions = ({
             <Form>
               <div>
                 <div>
-                  {console.log(formik.values)}
+           
                   <div className="row g-3">
                     <div className="my-4">
                       <label

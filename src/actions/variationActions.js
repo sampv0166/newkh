@@ -41,7 +41,7 @@ export const createVariation =
           Authorization: `Bearer ${userInfo.success.token}`,
         },
       };
-      console.log(ProductVariationList);
+
 
       ProductVariationList.map((variations, index) => {
         const arr = variations.images.map((file) => file);
@@ -153,9 +153,7 @@ export const updateVariation =
         },
       };
 
-      for (var value of formdata.values()) {
-        console.log(value);
-      }
+
 
       const { data } = axios.post(
         `${BASE_URL}api/v2/admin/variation`,
@@ -165,6 +163,7 @@ export const updateVariation =
 
       if (deleteimageurl.length > 0) {
         deleteimageurl.map((url) => {
+
           dispatch(deleteVariationImage(url, varId, productId));
         });
       }
@@ -255,7 +254,6 @@ export const deleteVariationImage =
       dispatch({
         type: VARIATION_IMAGE_DELETE_SUCCESS,
       });
-
     } catch (error) {
       const message =
         error.response && error.response.data.message

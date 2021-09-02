@@ -22,7 +22,7 @@ import { createVariation, updateVariation } from "./variationActions";
 export const searchProducts = (keyword) => async (dispatch) => {};
 
 export const listProducts = (pageNumber, keyword) => async (dispatch) => {
-  console.log(keyword);
+ 
   if (keyword === "" || keyword === undefined || keyword === null) {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
@@ -42,7 +42,7 @@ export const listProducts = (pageNumber, keyword) => async (dispatch) => {
 
       data2 = data;
 
-      console.log(data2);
+   
 
       dispatch({
         type: PRODUCT_LIST_SUCCESS,
@@ -73,7 +73,7 @@ export const listProducts = (pageNumber, keyword) => async (dispatch) => {
         config
       );
 
-      console.log(data);
+     
 
       dispatch({
         type: PRODUCT_LIST_SUCCESS,
@@ -131,7 +131,8 @@ export const createProduct =
     hasVariant,
     productId,
     varId,
-    values
+    values,
+    deleteimageurl
   ) =>
   async () => {
     try {
@@ -194,7 +195,7 @@ export const createProduct =
             }
           }
 
-          dispatch(updateVariation(dispatch, formdata));
+          dispatch(updateVariation(dispatch, formdata , productId , deleteimageurl , varId));
         }
       }
     } catch (error) {

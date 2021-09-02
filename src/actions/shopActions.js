@@ -1,6 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "../constants/Globals";
 import {
+  ALL_SHOP_FAIL,
+  ALL_SHOP_REQUEST,
+  ALL_SHOP_SUCCESS,
   SHOP_CREATE_FAIL,
   SHOP_CREATE_REQUEST,
   SHOP_CREATE_SUCCESS,
@@ -20,7 +23,11 @@ export const listShops = (pageNumber, history) => async (dispatch) => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   if (userInfo.user.typeofuser === "A") {
-    
+    history.push(`/shops/createshop/${userInfo.user.shop_id}`);
+    return;
+  }
+
+  if (userInfo.user.typeofuser === "U") {
     history.push(`/shops/createshop/${userInfo.user.shop_id}`);
     return;
   }
@@ -39,6 +46,33 @@ export const listShops = (pageNumber, history) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SHOP_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getAllShops = () => async (dispatch) => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  try {
+    dispatch({ type: ALL_SHOP_REQUEST });
+
+    const { data } = await axios.get(
+      `${BASE_URL}api/v2/admin/allshops`
+
+      //`${BASE_URL}api/v2/public/shop?page=${pageNumber}`
+    );
+
+    dispatch({
+      type: ALL_SHOP_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_SHOP_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -100,23 +134,14 @@ export const createShop = (dispatch, formdata) => async () => {
       config
     );
 
-
-
     dispatch({
       type: SHOP_CREATE_SUCCESS,
       payload: data,
     });
 
-
-
-    if(userInfo.user.typeofuser === 'S')
-    {
+    if (userInfo.user.typeofuser === "S") {
       dispatch(listShops(1));
     }
-    
-
-
-
   } catch (error) {
     const message =
       error.response && error.response.data.error
@@ -148,11 +173,10 @@ export const deleteShop = (formdata) => async (dispatch, getState) => {
     };
 
     await axios.post(`${BASE_URL}api/v2/admin/deleteshop`, formdata, config);
-    if(userInfo.user.typeofuser === 'S')
-    {
+    if (userInfo.user.typeofuser === "S") {
       dispatch(listShops(1));
     }
-    
+
     dispatch({
       type: SHOP_DELETE_SUCCESS,
     });

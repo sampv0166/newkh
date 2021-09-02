@@ -83,7 +83,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     <span
                       className="input-group-text"
                       onClick={() => {
-                        console.log(keyword);
+                   
                         dispatch(listProducts(1, keyword));
                         setKeyword('');
                       }}

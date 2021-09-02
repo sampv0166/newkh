@@ -3,7 +3,7 @@ import { useLayoutEffect } from 'react';
 import { Button, Card, Nav, Pagination, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteUser, listUsers } from '../../actions/userActions';
+import { deleteUser, listUserDetails, listUsers } from '../../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
@@ -28,6 +28,8 @@ const UsersScreen = ({ history, match }) => {
   };
 
   useLayoutEffect(() => {
+
+
     dispatch(listUsers(pageNumber));
   }, [dispatch, pageNumber]);
 

@@ -190,7 +190,7 @@ export const listUserDetails = (shopId) => async (dispatch) => {
     };
 
     const { data } = await axios.get(
-      `${BASE_URL}api/v2/admin/${shopId}`,
+      `${BASE_URL}api/v2/admin/fetchuser?id=${shopId}`,
       config
     );
 
@@ -209,14 +209,13 @@ export const listUserDetails = (shopId) => async (dispatch) => {
   }
 };
 
-export const createUser = (dispatch, formdata) => async () => {
+export const createUser = (dispatch, formdata, values) => async () => {
   try {
     dispatch({
       type: USER_CREATE_REQUEST,
     });
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
 
     const config = {
       headers: {
@@ -234,7 +233,17 @@ export const createUser = (dispatch, formdata) => async () => {
     formdata.delete("id");
     formdata.set("user_id", data.success.id);
 
-    dispatch(createPermission(dispatch, formdata));
+    let submit = false;
+
+    for (var pair of formdata.entries()) {
+      if (pair[0] === "add_permission[]") {
+        submit = true;
+      }
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    if (submit) {
+      dispatch(createPermission(dispatch, formdata));
+    }
 
     dispatch({
       type: USER_CREATE_SUCCESS,

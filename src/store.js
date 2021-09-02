@@ -25,6 +25,7 @@ import {
   categoryReducer,
 } from './reducers/categoryReducer';
 import {
+  allShopReducer,
   shopCreateReducer,
   shopDeleteReducer,
   shopDetailsReducer,
@@ -56,6 +57,7 @@ const reducer = combineReducers({
   shopListDetails: shopDetailsReducer,
   shopDelete: shopDeleteReducer,
   shopCreate: shopCreateReducer,
+  allshops : allShopReducer ,
 
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
@@ -84,7 +86,11 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
 
   permissionCreate: createPermissionReducer,
+
+ 
+
 });
+
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))

@@ -210,7 +210,7 @@ const AddNewCategoryScreen = ({ match, history }) => {
                         formik.setFieldValue('isactive', d);
                       }}
                     />
-                    {console.log(active)}
+                  
                     <label
                       class="form-check-label"
                       for="flexSwitchCheckDefault"

@@ -162,6 +162,7 @@ const SideBar = () => {
             </Link>
           </li>
 
+
           <li
             className={`${path.slice(1).includes("shops") ? "mm-active" : ""}`}
           >
@@ -174,6 +175,7 @@ const SideBar = () => {
               <span className="nav-text">Shop</span>
             </Link>
           </li>
+
 
           <li
             className={`${path.slice(1).includes("orders") ? "mm-active" : ""}`}
@@ -199,7 +201,8 @@ const SideBar = () => {
             </Link>
           </li>
 
-          {userInfo.user.typeofuser === "S" ? (
+          {userInfo.user.typeofuser === "S" ||
+          userInfo.user.typeofuser === "A" ? (
             <li
               className={`${
                 path.slice(1).includes("usersList") ? "mm-active" : ""
@@ -217,23 +220,6 @@ const SideBar = () => {
           ) : (
             ""
           )}
-
-
-            <li
-              className={`${
-                path.slice(1).includes("usersList") ? "mm-active" : ""
-              }`}
-            >
-              <Link
-                to={`/usersList/page/1`}
-                className="ai-icon"
-                aria-expanded="false"
-              >
-                <i className="flaticon-381-user"></i>
-                <span className="nav-text">Customers</span>
-              </Link>
-            </li>
-
 
           {/*<li className={`${app.includes(path.slice(1)) ? "mm-active" : ""}`}>
             <Link className="has-arrow ai-icon" to="#" aria-expanded="false">

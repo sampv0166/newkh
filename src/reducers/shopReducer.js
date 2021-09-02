@@ -1,4 +1,7 @@
 import {
+  ALL_SHOP_FAIL,
+  ALL_SHOP_REQUEST,
+  ALL_SHOP_SUCCESS,
   SHOP_CREATE_FAIL,
   SHOP_CREATE_REQUEST,
   SHOP_CREATE_SUCCESS,
@@ -25,6 +28,22 @@ export const shopReducer = (state = { shops: [] }, action) => {
         page: action.payload.current_page,
       };
     case SHOP_FAIL:
+      return { loading: false, shopError: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const allShopReducer = (state = { shops: [] }, action) => {
+  switch (action.type) {
+    case ALL_SHOP_REQUEST:
+      return { loading: true, shops: [] };
+    case ALL_SHOP_SUCCESS:
+      return {
+        loading: false,
+        shops: action.payload.data,
+      };
+    case ALL_SHOP_FAIL:
       return { loading: false, shopError: action.payload };
     default:
       return state;

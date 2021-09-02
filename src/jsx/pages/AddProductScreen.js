@@ -13,7 +13,7 @@ import TextField from "../components/TextField";
 import Select from "../components/Select";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../actions/categoryActions";
-import { listShops } from "../../actions/shopActions";
+import { getAllShops, listShops } from "../../actions/shopActions";
 import VariationOptions from "./VariationOptions";
 import ChooseVariationOptions from "./ChooseVariationOptions";
 import VariationTable from "./VariationTable";
@@ -50,6 +50,8 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
 
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [formikFileArray, setFormikFileArray] = useState([]);
+
+  const [deleteimageurl, setDeletedimageurl] = useState([]);
 
   const [pushh, setPush] = useState(false);
 
@@ -205,6 +207,17 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     formik.setFieldValue("images", files);
     formik.setFieldValue("image", files);
     setFormikFileArray(files);
+
+    if (varId) {
+      var url = `khaymatapi.mvp-apps.ae/storage/`;
+      var result = fileToRemove.toString();
+      result = result.replace(url.toString(), "");
+      result = result.replace("://www.", "");
+      result = result.replace("https://", "");
+      deleteimageurl.push(result);
+
+      //dispatch(deleteVariationImage(result, varId, productId));
+    }
   };
 
   const renderImageUpload = (formik) => {
@@ -410,13 +423,12 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   };
 
   useEffect(() => {
-    console.log(history);
     if (category.length === 0) {
       dispatch(getCategory());
     }
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (shops.length === 0 && userinfo.user.typeofuser === "S") {
-      dispatch(listShops());
+      dispatch(getAllShops());
     }
 
     if (product && product.length > 0) {
@@ -478,15 +490,12 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
       }
       setProductVariationList(product[0].variations);
     }
-    console.log(formikFileArray);
-    console.log(selectedFiles);
   }, [dispatch, productId, product]);
 
   useLayoutEffect(() => {
     if (productId) {
       dispatch(listProductDetails(productId));
     }
-    console.log(selectedFiles);
   }, [dispatch, productId]);
 
   const setArr = (arr, values) => {
@@ -598,7 +607,8 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
           hasVariant,
           productId,
           varId,
-          values
+          values,
+          deleteimageurl
         )
       );
 
@@ -919,7 +929,6 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                     ""
                   )}
                   <div>
-                    {console.log(formik.values)}
                     <button
                       className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
                       type="submit"

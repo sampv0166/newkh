@@ -6,7 +6,7 @@ import {
   PERMISSION_CREATE_SUCCESS,
 } from "../constants/permissionConstants";
 
-export const createPermission = (dispatch, formdata) => async () => {
+export const createPermission = (dispatch, formdata ) => async () => {
   try {
     dispatch({
       type: PERMISSION_CREATE_REQUEST,

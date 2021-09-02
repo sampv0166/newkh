@@ -13,21 +13,34 @@ import { Card, Col, Row } from "react-bootstrap";
 import CheckboxGroup from "../components/CheckboxGroup";
 import Select from "../components/Select";
 import { getCategory } from "../../actions/categoryActions";
+import { getAllShops, listShops } from "../../actions/shopActions";
+import checkbox from "../components/checkbox";
 
 const AddNewUserScreen = ({ match, history }) => {
+  const [prodAdd, setProdadd] = useState({ checked: false });
+  const [prodUpdate, setProdUpdate] = useState({ checked: false });
+  const [prodDelete, setProdDelete] = useState({ checked: false });
+
+  const [shopAdd, setshopadd] = useState({ checked: false });
+  const [shopUpdate, setshopUpdate] = useState({ checked: false });
+  const [shopDelete, setshopDelete] = useState({ checked: false });
+
+  const [CategoryAdd, setCategoryAdd] = useState({ checked: false });
+  const [categoryUpdate, setcategoryUpdate] = useState({ checked: false });
+  const [categoryDelete, setcategoryDelete] = useState({ checked: false });
+
+  const [variationAdd, setvariationAdd] = useState({ checked: false });
+  const [variationUpdate, setvariationUpdate] = useState({ checked: false });
+  const [variationDelete, setvariationDelete] = useState({ checked: false });
+
   const [userImage, setUserImage] = useState([]);
+
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
 
   const userCreate = useSelector((state) => state.userCreate);
   const { loading: loadingcreate, error: errorcreate } = userCreate;
   const dispatch = useDispatch();
-
-  const [permissions, setPermissions] = useState([
-    { key: "add", value: "add" },
-    { key: "update", value: "update" },
-    { key: "delete", value: "delete" },
-  ]);
 
   const shopList = useSelector((state) => state.shopList);
   const { shoploading, shopError, shops } = shopList;
@@ -71,19 +84,95 @@ const AddNewUserScreen = ({ match, history }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (userId && user) {
       setUserImage(user.photo);
-      /*if (category.active === true) {
-            setActive({ checked: true });
-          } else {
-            setActive({ checked: false });
-          }*/
+      if (user.permissions && user.permissions.includes("product.add")) {
+        setProdadd({ checked: true });
+      } else {
+        setProdadd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("product.update")) {
+        setProdUpdate({ checked: true });
+      } else {
+        setProdUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("product.update")) {
+        setProdDelete({ checked: true });
+      } else {
+        setProdDelete({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("shop.add")) {
+        setshopadd({ checked: true });
+      } else {
+        setshopadd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("shop.update")) {
+        setshopUpdate({ checked: true });
+      } else {
+        setshopUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("shop.delete")) {
+        setshopDelete({ checked: true });
+      } else {
+        setshopDelete({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("product.update")) {
+        setProdDelete({ checked: true });
+      } else {
+        setProdDelete({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("category.add")) {
+        setCategoryAdd({ checked: true });
+      } else {
+        setCategoryAdd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("category.update")) {
+        setcategoryUpdate({ checked: true });
+      } else {
+        setcategoryUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("category.delete")) {
+        setcategoryDelete({ checked: true });
+      } else {
+        setcategoryDelete({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("variation.add")) {
+        setvariationAdd({ checked: true });
+      } else {
+        setvariationAdd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("variation.update")) {
+        setvariationUpdate({ checked: true });
+      } else {
+        setvariationUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("variation.delete")) {
+        setvariationDelete({ checked: true });
+      } else {
+        setvariationDelete({ checked: false });
+      }
     }
   }, [user]);
 
   useLayoutEffect(() => {
-    dispatch(getCategory());
-    //dispatch(listUserDetails(userId));
+    if (userInfo.user.typeofuser === "S") {
+      dispatch(getAllShops());
+    }
+    if (user && userId) {
+      dispatch(listUserDetails(userId));
+    }
   }, [dispatch, userId]);
 
   const validate = Yup.object({
@@ -96,8 +185,8 @@ const AddNewUserScreen = ({ match, history }) => {
       .required("Required"),
   });
 
-  const handleSubmit = async (formdata) => {
-    dispatch(createUser(dispatch, formdata));
+  const handleSubmit = async (formdata, values) => {
+    dispatch(createUser(dispatch, formdata, values));
     history.push("/usersList/page/1");
   };
 
@@ -111,17 +200,27 @@ const AddNewUserScreen = ({ match, history }) => {
         <Formik
           enableReinitialize
           initialValues={{
-            product: "",
-            shop: "",
-            category: "",
-            variation: "",
-            order: "",
-            users: "",
-            name: "",
-            email: "",
+            prodadd: false,
+            produpdate: false,
+            proddelete: false,
+
+            shopadd: false,
+            shopdelete: false,
+            shopupdate: false,
+
+            categoryadd: false,
+            categorydelete: false,
+            categoryupdate: false,
+
+            variationadd: false,
+            variationdelete: false,
+            variationupdate: false,
+
+            name: (userId && user.name) || "",
+            email: (userId && user.email) || "",
             password: "",
             image: "",
-            shop_id: "",
+            shop_id: (userId && user.shop_id) || "",
           }}
           validationSchema={validate}
           onSubmit={(values) => {
@@ -137,63 +236,8 @@ const AddNewUserScreen = ({ match, history }) => {
             if (typeof values.image === "string") {
               formdata.delete("image");
             } else {
-              formdata.append("photo", values.photo);
+              formdata.append("photo", values.image);
             }
-
-            let permissionlsit = {
-              product: values.product,
-              shop: values.shop,
-              category: values.category,
-              variations: values.variation,
-            };
-
-            values.product.map((item) => {
-              let str1 = "product.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
-
-            values.shop.map((item) => {
-              let str1 = "shop.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
-
-            values.category.map((item) => {
-              let str1 = "category.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
-
-            values.variation.map((item) => {
-              let str1 = "variation.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
-
-            values.users.map((item) => {
-              let str1 = "user.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
-
-            values.order.map((item) => {
-              let str1 = "order.";
-              let str2 = item;
-              let res = str1.concat(str2);
-
-              formdata.append("add_permission[]", res);
-            });
 
             if (userInfo.user.typeofuser === "S") {
               formdata.append("shop_id", values.shop_id);
@@ -203,11 +247,55 @@ const AddNewUserScreen = ({ match, history }) => {
               formdata.append("shop_id", userInfo.user.shop_id);
             }
 
-            for (var value of formdata.values()) {
-              console.log(value);
+            if (prodAdd.checked) {
+              formdata.append("add_permission[]", "product.add");
             }
 
-            handleSubmit(formdata);
+            if (prodUpdate.checked) {
+              formdata.append("add_permission[]", "product.update");
+            }
+
+            if (prodDelete.checked) {
+              formdata.append("add_permission[]", "product.delete");
+            }
+
+            if (shopAdd.checked) {
+              formdata.append("add_permission[]", "shop.add");
+            }
+
+            if (shopUpdate.checked) {
+              formdata.append("add_permission[]", "shop.update");
+            }
+
+            if (shopDelete.checked) {
+              formdata.append("add_permission[]", "shop.delete");
+            }
+
+            if (CategoryAdd.checked) {
+              formdata.append("add_permission[]", "category.add");
+            }
+
+            if (categoryUpdate.checked) {
+              formdata.append("add_permission[]", "category.update");
+            }
+
+            if (categoryDelete.checked) {
+              formdata.append("add_permission[]", "category.delete");
+            }
+
+            if (variationAdd.checked) {
+              formdata.append("add_permission[]", "variation.add");
+            }
+
+            if (variationUpdate.checked) {
+              formdata.append("add_permission[]", "variation.update");
+            }
+
+            if (variationDelete.checked) {
+              formdata.append("add_permission[]", "variation.delete");
+            }
+
+            handleSubmit(formdata, values);
           }}
         >
           {(formik) => (
@@ -281,7 +369,7 @@ const AddNewUserScreen = ({ match, history }) => {
                   <div className="col-md-6">
                     <div className="row g-3">
                       <div className="col-md-6">
-                        <TextField label="Name" name="name" type="text" />
+                        <TextField label="Name" name="name" type="text"/>
                       </div>
                       <div className="col-md-6">
                         <TextField label="email" name="email" type="text" />
@@ -290,7 +378,7 @@ const AddNewUserScreen = ({ match, history }) => {
                     <div className="row g-3">
                       <div className="col-md-12">
                         <TextField
-                          label="Admin Password"
+                          label="Password"
                           name="password"
                           type="password"
                         />
@@ -312,7 +400,7 @@ const AddNewUserScreen = ({ match, history }) => {
                           ""
                         )}
 
-                        {userInfo.user.typeofuser === "A" ? (
+                        {userInfo.user.typeofuser === "S" ? (
                           <Col className="col-md-6">
                             <Select
                               control="select"
@@ -335,58 +423,210 @@ const AddNewUserScreen = ({ match, history }) => {
                     </button>
                   </div>
                 </div>
+
                 <Row>
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="Product Permissions"
-                      name="product"
-                      options={permissions}
-                    />
+                  <Col className="col-md-6 my-4">
+                    Product Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={prodAdd.checked}
+                        onChange={(d) => {
+                          prodAdd.checked === true ? (d = false) : (d = true);
+                          setProdadd({ checked: d });
+                          formik.setFieldValue("prodadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={prodUpdate.checked}
+                        onChange={(d) => {
+                          prodUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setProdUpdate({ checked: d });
+                          formik.setFieldValue("produpdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={prodDelete.checked}
+                        onChange={(d) => {
+                          prodDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setProdDelete({ checked: d });
+                          formik.setFieldValue("proddelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
+                  </Col>
 
-                    {console.log(formik.values)}
-                  </Col>
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="Category Permissions"
-                      name="category"
-                      options={permissions}
-                    />
-                  </Col>
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="Shop Permissions"
-                      name="shop"
-                      options={permissions}
-                    />
-                  </Col>
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="Variation Permissions"
-                      name="variation"
-                      options={permissions}
-                    />
+                  <Col className="col-md-6 my-4">
+                    Shop Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={shopAdd.checked}
+                        onChange={(d) => {
+                          shopAdd.checked === true ? (d = false) : (d = true);
+                          setshopadd({ checked: d });
+                          formik.setFieldValue("shopadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={shopUpdate.checked}
+                        onChange={(d) => {
+                          shopUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setshopUpdate({ checked: d });
+                          formik.setFieldValue("shopupdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={shopDelete.checked}
+                        onChange={(d) => {
+                          shopDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setshopDelete({ checked: d });
+                          formik.setFieldValue("shopdelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
                   </Col>
 
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="User Permissions"
-                      name="order"
-                      options={permissions}
-                    />
+                  <Col className="col-md-6 my-4">
+                    Category Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={CategoryAdd.checked}
+                        onChange={(d) => {
+                          CategoryAdd.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setCategoryAdd({ checked: d });
+                          formik.setFieldValue("categoryadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={categoryUpdate.checked}
+                        onChange={(d) => {
+                          categoryUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setcategoryUpdate({ checked: d });
+                          formik.setFieldValue("categoryupdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={categoryDelete.checked}
+                        onChange={(d) => {
+                          categoryDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setcategoryDelete({ checked: d });
+                          formik.setFieldValue("categoryDelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
                   </Col>
 
-                  <Col className="col-3">
-                    <CheckboxGroup
-                      control="checkbox"
-                      label="Order Permissions"
-                      name="users"
-                      options={permissions}
-                    />
+                  <Col className="col-md-6 my-4">
+                    Variation Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={variationAdd.checked}
+                        onChange={(d) => {
+                          variationAdd.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setvariationAdd({ checked: d });
+                          formik.setFieldValue("variationAdd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={variationUpdate.checked}
+                        onChange={(d) => {
+                          variationUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setvariationUpdate({ checked: d });
+                          formik.setFieldValue("variationUpdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={variationDelete.checked}
+                        onChange={(d) => {
+                          variationDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setvariationDelete({ checked: d });
+                          formik.setFieldValue("variationDelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
                   </Col>
                 </Row>
               </div>

@@ -28,11 +28,11 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <>
-      {console.log(error)}
+     
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{console.log(error)}</Message>
+        <Message variant="danger">{error}</Message>
       ) : (
         <div className="authincation">
           <div className="container p-0">
