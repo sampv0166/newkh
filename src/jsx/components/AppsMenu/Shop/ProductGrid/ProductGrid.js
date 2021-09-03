@@ -4,31 +4,31 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
-import Products from "./Products";
-import debounce from "lodash.debounce";
+} from 'react';
+import Products from './Products';
+import debounce from 'lodash.debounce';
 
 /// Data
-import productData from "../productData";
+import productData from '../productData';
 
-import PageTitle from "../../../../layouts/PageTitle";
+import PageTitle from '../../../../layouts/PageTitle';
 
-import { Button, Dropdown, Nav, Pagination } from "react-bootstrap";
-import Paginate from "../../../Paginate";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Dropdown, Nav, Pagination } from 'react-bootstrap';
+import Paginate from '../../../Paginate';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   listProductDetails,
   listProducts,
-} from "../../../../../actions/productActions";
-import { Link } from "react-router-dom";
-import Loader from "../../../Loader";
-import Message from "../../../Message";
-import { Formik } from "formik";
-import { set } from "date-fns";
+} from '../../../../../actions/productActions';
+import { Link } from 'react-router-dom';
+import Loader from '../../../Loader';
+import Message from '../../../Message';
+import { Formik } from 'formik';
+import { set } from 'date-fns';
 
 const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
-  const [keyword, setKeyword] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [keyword, setKeyword] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [all, setAll] = useState({ checked: true });
   const [deleted, setDeleted] = useState({ checked: false });
 
@@ -64,8 +64,10 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   };
 
   useEffect(() => {
+    
     dispatch(listProducts(pageNumber));
     dispatch(listProductDetails(0));
+
   }, [dispatch, pageNumber]);
 
   for (let number = 1; number <= pages; number++) {
@@ -83,9 +85,9 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   const pag = (size, gutter, variant, bg, circle) => (
     <Pagination
       size={size}
-      className={`mt-4  ${gutter ? "pagination-gutter" : ""} ${
+      className={`mt-4  ${gutter ? 'pagination-gutter' : ''} ${
         variant && `pagination-${variant}`
-      } ${!bg && "no-bg"} ${circle && "pagination-circle"}`}
+      } ${!bg && 'no-bg'} ${circle && 'pagination-circle'}`}
     >
       {items}
     </Pagination>
@@ -162,7 +164,8 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
                   <Dropdown.Item
                     onClick={() => {
                       setHasVariant({ checked: false });
-                      history.push("/ecom/addnewproduct");
+                      history.push('/ecom/addnewproduct');
+                      dispatch(listProductDetails(0));
                     }}
                   >
                     Add New Product
@@ -171,7 +174,8 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
                   <Dropdown.Item
                     onClick={() => {
                       setHasVariant({ checked: true });
-                      history.push("/ecom/addnewproduct");
+                      history.push('/ecom/addnewproduct');
+                      dispatch(listProductDetails(0));
                     }}
                   >
                     Add Product With Variants
@@ -191,7 +195,7 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
               />
             ))}
           </div>
-          <Nav>{pag("", true, "danger", true, false)}</Nav>
+          <Nav>{pag('', true, 'danger', true, false)}</Nav>
         </Fragment>
       )}
     </>

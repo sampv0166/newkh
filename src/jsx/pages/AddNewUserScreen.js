@@ -1,20 +1,20 @@
-import React from "react";
-import { useLayoutEffect } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createUser, listUserDetails } from "../../actions/userActions";
-import * as Yup from "yup";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
-import { ErrorMessage, Form, Formik } from "formik";
-import TextField from "../components/TextField";
-import { Card, Col, Row } from "react-bootstrap";
-import CheckboxGroup from "../components/CheckboxGroup";
-import Select from "../components/Select";
-import { getCategory } from "../../actions/categoryActions";
-import { getAllShops, listShops } from "../../actions/shopActions";
-import checkbox from "../components/checkbox";
+import React from 'react';
+import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createUser, listUserDetails } from '../../actions/userActions';
+import * as Yup from 'yup';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import { ErrorMessage, Form, Formik } from 'formik';
+import TextField from '../components/TextField';
+import { Card, Col, Row } from 'react-bootstrap';
+import CheckboxGroup from '../components/CheckboxGroup';
+import Select from '../components/Select';
+import { getCategory } from '../../actions/categoryActions';
+import { getAllShops, listShops } from '../../actions/shopActions';
+import checkbox from '../components/checkbox';
 
 const AddNewUserScreen = ({ match, history }) => {
   const [prodAdd, setProdadd] = useState({ checked: false });
@@ -42,31 +42,31 @@ const AddNewUserScreen = ({ match, history }) => {
   const { loading: loadingcreate, error: errorcreate } = userCreate;
   const dispatch = useDispatch();
 
-  const shopList = useSelector((state) => state.shopList);
-  const { shoploading, shopError, shops } = shopList;
+  const allshops = useSelector((state) => state.allshops);
+  const { loading: shoploading, shopError, shops } = allshops;
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   const populateShops = () => {
-    const user = JSON.parse(localStorage.getItem("userInfo"));
-    if (user.user.typeofuser === "A") {
+    const user = JSON.parse(localStorage.getItem('userInfo'));
+    if (user.user.typeofuser === 'A') {
       let objects = [2];
 
       objects[0] = {
         key: user.user.name,
         value: user.user.shop_id,
       };
-      objects.unshift({ key: "choose", value: "" });
+      objects.unshift({ key: 'choose', value: '' });
 
       return objects;
     }
 
-    if (user.user.typeofuser === "S") {
+    if (user.user.typeofuser === 'S') {
       let objects = [shops.length];
       for (var x = 0; x < shops.length; x++) {
         objects[x] = { key: shops[x].shop_name, value: shops[x].id };
       }
-      objects.unshift({ key: "choose", value: "" });
+      objects.unshift({ key: 'choose', value: '' });
       return objects;
     }
   };
@@ -80,85 +80,85 @@ const AddNewUserScreen = ({ match, history }) => {
       URL.revokeObjectURL(e.target.files);
     }
 
-    formik.setFieldValue("image", e.currentTarget.files[0]);
+    formik.setFieldValue('image', e.currentTarget.files[0]);
   };
 
   useEffect(() => {
     if (userId && user) {
       setUserImage(user.photo);
-      if (user.permissions && user.permissions.includes("product.add")) {
+      if (user.permissions && user.permissions.includes('product.add')) {
         setProdadd({ checked: true });
       } else {
         setProdadd({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("product.update")) {
+      if (user.permissions && user.permissions.includes('product.update')) {
         setProdUpdate({ checked: true });
       } else {
         setProdUpdate({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("product.update")) {
+      if (user.permissions && user.permissions.includes('product.update')) {
         setProdDelete({ checked: true });
       } else {
         setProdDelete({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("shop.add")) {
+      if (user.permissions && user.permissions.includes('shop.add')) {
         setshopadd({ checked: true });
       } else {
         setshopadd({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("shop.update")) {
+      if (user.permissions && user.permissions.includes('shop.update')) {
         setshopUpdate({ checked: true });
       } else {
         setshopUpdate({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("shop.delete")) {
+      if (user.permissions && user.permissions.includes('shop.delete')) {
         setshopDelete({ checked: true });
       } else {
         setshopDelete({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("product.update")) {
+      if (user.permissions && user.permissions.includes('product.update')) {
         setProdDelete({ checked: true });
       } else {
         setProdDelete({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("category.add")) {
+      if (user.permissions && user.permissions.includes('category.add')) {
         setCategoryAdd({ checked: true });
       } else {
         setCategoryAdd({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("category.update")) {
+      if (user.permissions && user.permissions.includes('category.update')) {
         setcategoryUpdate({ checked: true });
       } else {
         setcategoryUpdate({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("category.delete")) {
+      if (user.permissions && user.permissions.includes('category.delete')) {
         setcategoryDelete({ checked: true });
       } else {
         setcategoryDelete({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("variation.add")) {
+      if (user.permissions && user.permissions.includes('variation.add')) {
         setvariationAdd({ checked: true });
       } else {
         setvariationAdd({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("variation.update")) {
+      if (user.permissions && user.permissions.includes('variation.update')) {
         setvariationUpdate({ checked: true });
       } else {
         setvariationUpdate({ checked: false });
       }
 
-      if (user.permissions && user.permissions.includes("variation.delete")) {
+      if (user.permissions && user.permissions.includes('variation.delete')) {
         setvariationDelete({ checked: true });
       } else {
         setvariationDelete({ checked: false });
@@ -167,7 +167,7 @@ const AddNewUserScreen = ({ match, history }) => {
   }, [user]);
 
   useLayoutEffect(() => {
-    if (userInfo.user.typeofuser === "S") {
+    if (userInfo.user.typeofuser === 'S') {
       dispatch(getAllShops());
     }
     if (user && userId) {
@@ -177,17 +177,17 @@ const AddNewUserScreen = ({ match, history }) => {
 
   const validate = Yup.object({
     name: Yup.string()
-      .min(1, "Name must be atleast one character")
-      .required("Required"),
-    email: Yup.string().email("email is invalid").required("Required"),
+      .min(1, 'Name must be atleast one character')
+      .required('Required'),
+    email: Yup.string().email('email is invalid').required('Required'),
     password: Yup.string()
-      .min(6, "password must be 6 characters")
-      .required("Required"),
+      .min(6, 'password must be 6 characters')
+      .required('Required'),
   });
 
   const handleSubmit = async (formdata, values) => {
     dispatch(createUser(dispatch, formdata, values));
-    history.push("/usersList/page/1");
+    history.push('/usersList/page/1');
   };
 
   return (
@@ -216,83 +216,83 @@ const AddNewUserScreen = ({ match, history }) => {
             variationdelete: false,
             variationupdate: false,
 
-            name: (userId && user.name) || "",
-            email: (userId && user.email) || "",
-            password: "",
-            image: "",
-            shop_id: (userId && user.shop_id) || "",
+            name: (userId && user.name) || '',
+            email: (userId && user.email) || '',
+            password: '',
+            image: '',
+            shop_id: (userId && user.shop_id) || '',
           }}
           validationSchema={validate}
           onSubmit={(values) => {
             let formdata = new FormData();
 
             if (userId) {
-              formdata.append("id", userId);
+              formdata.append('id', userId);
             }
-            formdata.append("name", values.name);
-            formdata.append("email", values.email);
-            formdata.append("password", values.password);
+            formdata.append('name', values.name);
+            formdata.append('email', values.email);
+            formdata.append('password', values.password);
 
-            if (typeof values.image === "string") {
-              formdata.delete("image");
+            if (typeof values.image === 'string') {
+              formdata.delete('image');
             } else {
-              formdata.append("photo", values.image);
+              formdata.append('photo', values.image);
             }
 
-            if (userInfo.user.typeofuser === "S") {
-              formdata.append("shop_id", values.shop_id);
+            if (userInfo.user.typeofuser === 'S') {
+              formdata.append('shop_id', values.shop_id);
             }
 
-            if (userInfo.user.typeofuser === "A") {
-              formdata.append("shop_id", userInfo.user.shop_id);
+            if (userInfo.user.typeofuser === 'A') {
+              formdata.append('shop_id', userInfo.user.shop_id);
             }
 
             if (prodAdd.checked) {
-              formdata.append("add_permission[]", "product.add");
+              formdata.append('add_permission[]', 'product.add');
             }
 
             if (prodUpdate.checked) {
-              formdata.append("add_permission[]", "product.update");
+              formdata.append('add_permission[]', 'product.update');
             }
 
             if (prodDelete.checked) {
-              formdata.append("add_permission[]", "product.delete");
+              formdata.append('add_permission[]', 'product.delete');
             }
 
             if (shopAdd.checked) {
-              formdata.append("add_permission[]", "shop.add");
+              formdata.append('add_permission[]', 'shop.add');
             }
 
             if (shopUpdate.checked) {
-              formdata.append("add_permission[]", "shop.update");
+              formdata.append('add_permission[]', 'shop.update');
             }
 
             if (shopDelete.checked) {
-              formdata.append("add_permission[]", "shop.delete");
+              formdata.append('add_permission[]', 'shop.delete');
             }
 
             if (CategoryAdd.checked) {
-              formdata.append("add_permission[]", "category.add");
+              formdata.append('add_permission[]', 'category.add');
             }
 
             if (categoryUpdate.checked) {
-              formdata.append("add_permission[]", "category.update");
+              formdata.append('add_permission[]', 'category.update');
             }
 
             if (categoryDelete.checked) {
-              formdata.append("add_permission[]", "category.delete");
+              formdata.append('add_permission[]', 'category.delete');
             }
 
             if (variationAdd.checked) {
-              formdata.append("add_permission[]", "variation.add");
+              formdata.append('add_permission[]', 'variation.add');
             }
 
             if (variationUpdate.checked) {
-              formdata.append("add_permission[]", "variation.update");
+              formdata.append('add_permission[]', 'variation.update');
             }
 
             if (variationDelete.checked) {
-              formdata.append("add_permission[]", "variation.delete");
+              formdata.append('add_permission[]', 'variation.delete');
             }
 
             handleSubmit(formdata, values);
@@ -307,10 +307,10 @@ const AddNewUserScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
+                          style={{ height: '280px', objectFit: 'cover' }}
                         >
                           <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                            style={{ height: '270px', objectFit: 'contain' }}
                             src={userImage}
                             variant="top"
                           />
@@ -326,7 +326,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             <ErrorMessage
                               component="div"
                               className="error text-danger"
-                              name={"image"}
+                              name={'image'}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
                             New Image
@@ -337,10 +337,10 @@ const AddNewUserScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
+                          style={{ height: '280px', objectFit: 'cover' }}
                         >
                           <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                            style={{ height: '270px', objectFit: 'contain' }}
                             src={userImage}
                             variant="top"
                           />
@@ -356,7 +356,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             <ErrorMessage
                               component="div"
                               className="error text-danger"
-                              name={"image"}
+                              name={'image'}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
                             New Image
@@ -369,7 +369,7 @@ const AddNewUserScreen = ({ match, history }) => {
                   <div className="col-md-6">
                     <div className="row g-3">
                       <div className="col-md-6">
-                        <TextField label="Name" name="name" type="text"/>
+                        <TextField label="Name" name="name" type="text" />
                       </div>
                       <div className="col-md-6">
                         <TextField label="email" name="email" type="text" />
@@ -384,11 +384,10 @@ const AddNewUserScreen = ({ match, history }) => {
                         />
                       </div>
                     </div>
-
                     <div className="row g-3">
                       <div className="col-md-12">
-                        {userInfo.user.typeofuser === "S" ? (
-                          <Col className="col-md-6">
+                        {userInfo.user.typeofuser === 'S' ? (
+                          <Col className="col">
                             <Select
                               control="select"
                               label="Shop Name"
@@ -397,31 +396,18 @@ const AddNewUserScreen = ({ match, history }) => {
                             ></Select>
                           </Col>
                         ) : (
-                          ""
-                        )}
-
-                        {userInfo.user.typeofuser === "S" ? (
-                          <Col className="col-md-6">
-                            <Select
-                              control="select"
-                              label="Shop Name"
-                              name="shop_id"
-                              options={populateShops()}
-                            ></Select>
-                          </Col>
-                        ) : (
-                          ""
+                          ''
                         )}
                       </div>
                     </div>
-
-                    <button
-                      className="btn btn-success mt-3 my-2 px-5"
-                      type="submit"
-                    >
-                      Save
-                    </button>
                   </div>
+
+                  <button
+                    className="btn btn-success mt-3 my-2 px-5"
+                    type="submit"
+                  >
+                    Save
+                  </button>
                 </div>
 
                 <Row>
@@ -436,7 +422,7 @@ const AddNewUserScreen = ({ match, history }) => {
                         onChange={(d) => {
                           prodAdd.checked === true ? (d = false) : (d = true);
                           setProdadd({ checked: d });
-                          formik.setFieldValue("prodadd", d);
+                          formik.setFieldValue('prodadd', d);
                         }}
                       />
                       <label className="form-check-label">Add</label>
@@ -452,7 +438,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setProdUpdate({ checked: d });
-                          formik.setFieldValue("produpdate", d);
+                          formik.setFieldValue('produpdate', d);
                         }}
                       />
                       <label className="form-check-label">Update</label>
@@ -468,7 +454,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setProdDelete({ checked: d });
-                          formik.setFieldValue("proddelete", d);
+                          formik.setFieldValue('proddelete', d);
                         }}
                       />
                       <label className="form-check-label">Delete</label>
@@ -486,7 +472,7 @@ const AddNewUserScreen = ({ match, history }) => {
                         onChange={(d) => {
                           shopAdd.checked === true ? (d = false) : (d = true);
                           setshopadd({ checked: d });
-                          formik.setFieldValue("shopadd", d);
+                          formik.setFieldValue('shopadd', d);
                         }}
                       />
                       <label className="form-check-label">Add</label>
@@ -502,7 +488,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setshopUpdate({ checked: d });
-                          formik.setFieldValue("shopupdate", d);
+                          formik.setFieldValue('shopupdate', d);
                         }}
                       />
                       <label className="form-check-label">Update</label>
@@ -518,7 +504,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setshopDelete({ checked: d });
-                          formik.setFieldValue("shopdelete", d);
+                          formik.setFieldValue('shopdelete', d);
                         }}
                       />
                       <label className="form-check-label">Delete</label>
@@ -538,7 +524,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setCategoryAdd({ checked: d });
-                          formik.setFieldValue("categoryadd", d);
+                          formik.setFieldValue('categoryadd', d);
                         }}
                       />
                       <label className="form-check-label">Add</label>
@@ -554,7 +540,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setcategoryUpdate({ checked: d });
-                          formik.setFieldValue("categoryupdate", d);
+                          formik.setFieldValue('categoryupdate', d);
                         }}
                       />
                       <label className="form-check-label">Update</label>
@@ -570,7 +556,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setcategoryDelete({ checked: d });
-                          formik.setFieldValue("categoryDelete", d);
+                          formik.setFieldValue('categoryDelete', d);
                         }}
                       />
                       <label className="form-check-label">Delete</label>
@@ -590,7 +576,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setvariationAdd({ checked: d });
-                          formik.setFieldValue("variationAdd", d);
+                          formik.setFieldValue('variationAdd', d);
                         }}
                       />
                       <label className="form-check-label">Add</label>
@@ -606,7 +592,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setvariationUpdate({ checked: d });
-                          formik.setFieldValue("variationUpdate", d);
+                          formik.setFieldValue('variationUpdate', d);
                         }}
                       />
                       <label className="form-check-label">Update</label>
@@ -622,7 +608,7 @@ const AddNewUserScreen = ({ match, history }) => {
                             ? (d = false)
                             : (d = true);
                           setvariationDelete({ checked: d });
-                          formik.setFieldValue("variationDelete", d);
+                          formik.setFieldValue('variationDelete', d);
                         }}
                       />
                       <label className="form-check-label">Delete</label>

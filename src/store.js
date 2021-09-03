@@ -45,19 +45,20 @@ import {
   orderStatusUpdateReducer,
 } from './reducers/orderReducers';
 import { createPermissionReducer } from './reducers/PermissionsReducer';
+import { hasvariantReducer } from './reducers/hasVariantReducer';
 
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   productDelete: productDeleteReducer,
-  searchProducts:searchProductReducer , 
+  searchProducts: searchProductReducer,
   userLogin: userLoginReducer,
 
   shopList: shopReducer,
   shopListDetails: shopDetailsReducer,
   shopDelete: shopDeleteReducer,
   shopCreate: shopCreateReducer,
-  allshops : allShopReducer ,
+  allshops: allShopReducer,
 
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
@@ -87,10 +88,8 @@ const reducer = combineReducers({
 
   permissionCreate: createPermissionReducer,
 
- 
-
+  hasvariant: hasvariantReducer,
 });
-
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
@@ -98,6 +97,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
+  hasvariant: false,
 };
 
 const middleware = [thunk];

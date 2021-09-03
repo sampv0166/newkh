@@ -14,7 +14,7 @@ import {
   SHOP_FAIL,
   SHOP_REQUEST,
   SHOP_SUCCESS,
-} from "../constants/shopConstants";
+} from '../constants/shopConstants';
 
 export const shopReducer = (state = { shops: [] }, action) => {
   switch (action.type) {

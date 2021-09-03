@@ -15,10 +15,34 @@ import {
 } from '../constants/categoryConstants';
 import { BASE_URL } from '../constants/Globals';
 
-export const getCategory = () => async (dispatch) => {
+export const getCategory = (keyword) => async (dispatch) => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.success.token}`,
+    },
+  };
+
   try {
     dispatch({ type: CATEGORY_REQUEST });
-    const { data } = await axios.get(`${BASE_URL}api/v2/admin/category`);
+
+    let resdata;
+
+    if (keyword === '' || keyword === undefined || keyword === null) {
+      const { data } = await axios.get(`${BASE_URL}api/v2/admin/category`);
+      resdata = data;
+    } else {
+      const {data} = await axios.get(
+        `${BASE_URL}api/v2/admin/adminsearch?search=${keyword}&type=categories`,
+        config
+      );
+      resdata = data;
+    }
+
+    const data = resdata
+
+
 
     dispatch({
       type: CATEGORY_SUCCESS,
@@ -131,8 +155,6 @@ export const deleteCategory = (id) => async (dispatch, getState) => {
     });
 
     dispatch(getCategory());
-
-    
   } catch (error) {
     const message =
       error.response && error.response.data.message

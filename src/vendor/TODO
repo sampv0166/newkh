@@ -1,54 +1,23 @@
-
-
+important 
+----------
+not getting all productdetails on get orderdetails
 SHOPTRN ISSUE
-
 API TO DELETE A USER
-
 get all shops with permission for admin
-getshopdetails for admin
-get userdetails as admin
-
 shop password update
-
 When logged in as shop admin -> return only employees belong to that shop
+EVEN IF IGIVE PERMISSION TO EXMPLOYEE IT DOESNT LET ME ADD
 
-WHEN LOGGED IN AS EMPLOYYE -> 
-GET ONLY THE ORDERS OF THEIR SHOP
-
-EVEN IF IGIVE PERMISSION TO EXMPLOYEE IT DIESNT LET ME ADD
-
-
-
-
-
-
-
-Api to get customers
-Search customers
-
-Get users of shop (for  system admin show all customers , for shop admin show only their customers)
-
-Add new users to the shop
-Set permissions to the users
-Delete user
 
 Orders
+Fix order table
 Show order details in table with image
 Link to product page
-invoice
 
 
-Search category
-Search shop
-Search users
-Search customers
-
-Fix order table
-
-If confirmed :ready for shipment - > order confirmed
-If rejected : order shipped -> order rejected
-If shipping there are not messages
+getallshops should give me only active shops
 
 
 {{baseurl}}/api/v2/admin/adminsearch?search=ab&type=shops
+
 

@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLayoutEffect } from 'react';
 import { Button, Card, Nav, Pagination, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteUser, listUserDetails, listUsers } from '../../actions/userActions';
+import {
+  deleteUser,
+  listUserDetails,
+  listUsers,
+} from '../../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import debounce from 'lodash.debounce';
 
 const UsersScreen = ({ history, match }) => {
+  const [inputValue, setInputValue] = useState('');
   const userList = useSelector((state) => state.userList);
   const { loading, error, users, pages, page } = userList;
 
@@ -28,8 +34,6 @@ const UsersScreen = ({ history, match }) => {
   };
 
   useLayoutEffect(() => {
-
-
     dispatch(listUsers(pageNumber));
   }, [dispatch, pageNumber]);
 
@@ -64,6 +68,16 @@ const UsersScreen = ({ history, match }) => {
     }
   };
 
+  const debouncedSave = useCallback(
+    debounce((newValue) => dispatch(listUsers(1, newValue)), 1000),
+    []
+  );
+
+  const updateValue = (newValue) => {
+    setInputValue(newValue);
+    debouncedSave(newValue);
+  };
+
   return (
     <>
       {loading || loadingDelete ? (
@@ -73,10 +87,22 @@ const UsersScreen = ({ history, match }) => {
       ) : (
         <div>
           {' '}
-          <div className="d-flex justify-content-end">
-            <Link to="/user/addnewuser">
-              <Button variant="secondary mb-2">Add New User</Button>
-            </Link>
+          <div className="d-flex justify-content-between my-4">
+            <div className="d-flex w-50">
+              <input
+                className="form-control shadow-none rounded mx-2"
+                placeholder="Search Users"
+                onChange={(input) => updateValue(input.target.value)}
+                value={inputValue}
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <Link to="/user/addnewuser">
+                <Button variant="secondary mb-2">Add New User</Button>
+              </Link>
+            </div>
           </div>
           <Card>
             <Card.Body>
@@ -98,7 +124,7 @@ const UsersScreen = ({ history, match }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((item, index) => (
+                  {users && users.map((item, index) => (
                     <tr>
                       <td>
                         <strong>{item.id}</strong>

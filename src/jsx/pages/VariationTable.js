@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { Card, Col, Table } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { listProductDetails } from "../../actions/productActions";
-import { deleteVariation } from "../../actions/variationActions";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
+import React, { useEffect } from 'react';
+import { Card, Col, Table } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProductDetails } from '../../actions/productActions';
+import { deleteVariation } from '../../actions/variationActions';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
 const VariationTable = ({
   hasVariant,
@@ -17,7 +17,7 @@ const VariationTable = ({
   varId,
   setVarId,
 }) => {
-  const TableHead = ["ID", "PRICE", "SIZE", "COLOR", " "];
+  const TableHead = ['ID', 'PRICE', 'SIZE', 'COLOR', ' '];
 
   let altimage;
 
@@ -26,12 +26,12 @@ const VariationTable = ({
     e.preventDefault();
 
     if (productId && ProductVariationList.length === 1) {
-      alert("atleast one variation is required");
+      alert('atleast one variation is required');
       return;
     }
 
     if (productId) {
-      if (window.confirm("Are you sure")) {
+      if (window.confirm('Are you sure')) {
         let arr;
 
         arr = ProductVariationList.filter((item, index) => index !== i);
@@ -51,9 +51,9 @@ const VariationTable = ({
       <span>
         <Card.Img
           style={{
-            height: "50px",
-            width: "50px",
-            objectFit: "contain",
+            height: '50px',
+            width: '50px',
+            objectFit: 'contain',
           }}
           src={image}
           variant="top"
@@ -91,11 +91,11 @@ const VariationTable = ({
                   <thead>
                     <tr>
                       <th scope="col">ID</th>
-                      {productId ? <th scope="col">IMAGES</th> : ""}
+                      {productId ? <th scope="col">IMAGES</th> : ''}
 
                       <th scope="col">PRICE</th>
-                      {!hasSize.checked ? "" : <th scope="col">SIZE</th>}
-                      {!hasColor.checked ? "" : <th scope="col">COLOR</th>}
+                      {!hasSize.checked ? '' : <th scope="col">SIZE</th>}
+                      {!hasColor.checked ? '' : <th scope="col">COLOR</th>}
                       <th scope="col" className="d-flex justify-content-center">
                         Action
                       </th>
@@ -112,23 +112,23 @@ const VariationTable = ({
                                 {item.images.map((image) => {
                                   if (
                                     image ===
-                                    "https://khaymatapi.mvp-apps.ae/storage/"
+                                    'https://khaymatapi.mvp-apps.ae/storage/'
                                   ) {
                                   } else {
-                                    renderVariationImages(image);
+                                    return renderVariationImages(image);
                                   }
                                 })}
                               </td>
                             ) : (
-                              ""
+                              ''
                             )}
 
                             <td>{item.price}</td>
 
-                            {!hasSize.checked ? "" : <td>{item.size_value}</td>}
+                            {!hasSize.checked ? '' : <td>{item.size_value}</td>}
 
                             {!hasColor.checked ? (
-                              ""
+                              ''
                             ) : (
                               <td>{item.color_name}</td>
                             )}
@@ -138,8 +138,8 @@ const VariationTable = ({
                                 <i
                                   className="fa fa-trash"
                                   style={{
-                                    cursor: "pointer",
-                                    color: "red",
+                                    cursor: 'pointer',
+                                    color: 'red',
                                   }}
                                   onClick={(e) =>
                                     handleDeletevariation(e, item.id, index)
@@ -150,8 +150,8 @@ const VariationTable = ({
                                   <i
                                     className="fa fa-pencil"
                                     style={{
-                                      cursor: "pointer",
-                                      color: "blue",
+                                      cursor: 'pointer',
+                                      color: 'blue',
                                     }}
                                     onClick={() => {
                                       dispatch(listProductDetails(productId));
@@ -160,19 +160,19 @@ const VariationTable = ({
                                     }}
                                   ></i>
                                 ) : (
-                                  ""
+                                  ''
                                 )}
                               </div>
                             </td>
                           </tr>
                         ))
-                      : ""}
+                      : ''}
                   </tbody>
                 </Table>
               </div>
             </Col>
           ) : (
-            ""
+            ''
           )}
         </div>
       )}

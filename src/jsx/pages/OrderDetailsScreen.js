@@ -1,11 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Badge, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Badge, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
-const OrderDetailsScreen = ({ match, history }) => {
+const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
   const [order, setOrder] = useState(null);
 
   const orderList = useSelector((state) => state.orderList);
@@ -19,7 +19,6 @@ const OrderDetailsScreen = ({ match, history }) => {
         setOrder(order);
       }
     });
-
   }, [orderId]);
 
   return (
@@ -38,36 +37,36 @@ const OrderDetailsScreen = ({ match, history }) => {
                     <ListGroup variant="flush">
                       <ListGroup.Item>
                         <h2>
-                          {" "}
+                          {' '}
                           {order.payment_status === 0 ? (
                             <Badge variant="warning">pending</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                           {order.payment_status === 1 ? (
                             <Badge variant="success">confirmed</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                           {order.payment_status === 2 ? (
                             <Badge variant="primary">shipping</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                           {order.payment_status === 3 ? (
                             <Badge variant="danger">rejected</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                           {order.payment_status === 4 ? (
                             <Badge variant="secondary">delivered</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                           {order.payment_status === 5 ? (
                             <Badge variant="danger">cancelled</Badge>
                           ) : (
-                            ""
+                            ''
                           )}
                         </h2>
                         <p>
@@ -87,7 +86,7 @@ const OrderDetailsScreen = ({ match, history }) => {
                         </p>
                         <p>
                           <strong>Whatsapp: </strong>
-                          {order.haswhatsapp === true ? "Yes" : "No"}
+                          {order.haswhatsapp === true ? 'Yes' : 'No'}
                         </p>
                       </ListGroup.Item>
 
@@ -106,10 +105,24 @@ const OrderDetailsScreen = ({ match, history }) => {
                                     rounded
                                   />
                           </Col>*/}
-                                <Col>
-                                  <Link to={`/product/${item.product_id}`}>
-                                    {item.name_en}
-                                  </Link>
+                                <Col
+                                  onClick={() => {
+                                    if (
+                                      item.variations.length === 1 &&
+                                      item.variations[0].color_name === null &&
+                                      item.variations[0].size_value === null
+                                    ) {
+                                      setHasVariant({ checked: false });
+                                    } else {
+                                      setHasVariant({ checked: true });
+                                    }
+
+                                    history.push(
+                                      `/ecom/product-edit/${item.id}`
+                                    );
+                                  }}
+                                >
+                                  {item.name_en}
                                 </Col>
                                 <Col md={4}>
                                   {item.quantity} x ${item.product_price} = $
