@@ -495,11 +495,13 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     }
   }, [dispatch, productId, product ]);
 
+
   useLayoutEffect(() => {
     if (productId) {
       dispatch(listProductDetails(productId));
     }
   }, [dispatch, productId]);
+  
 
   const setArr = (arr, values) => {
     if (hasVariant.checked === false) {

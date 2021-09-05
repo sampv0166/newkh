@@ -8,9 +8,7 @@ import {
   ORDER_LIST_FAIL,
   ORDER_LIST_REQUEST,
   ORDER_LIST_SUCCESS,
-} from '../constants/orderConstants';
-
-
+} from "../constants/orderConstants";
 
 export const orderListReducer = (state = { orders: [] }, action) => {
   switch (action.type) {
@@ -37,7 +35,7 @@ export const orderDetailsListReducer = (
 ) => {
   switch (action.type) {
     case ORDER_DETAILS_LIST_REQUEST:
-      return { loading: true, orders: [] };
+      return { loading: true, ordersDetails: [] };
     case ORDER_DETAILS_LIST_SUCCESS:
       return {
         loading: false,
@@ -49,6 +47,7 @@ export const orderDetailsListReducer = (
       return state;
   }
 };
+
 
 export const orderStatusUpdateReducer = (
   state = { orderStatus: [] },

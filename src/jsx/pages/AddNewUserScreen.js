@@ -33,6 +33,10 @@ const AddNewUserScreen = ({ match, history }) => {
   const [variationUpdate, setvariationUpdate] = useState({ checked: false });
   const [variationDelete, setvariationDelete] = useState({ checked: false });
 
+  const [ordersAdd, setordersAdd] = useState({ checked: false });
+  const [ordersUpdate, setordersUpdate] = useState({ checked: false });
+  const [ordersDelete, setordersDelete] = useState({ checked: false });
+
   const [userImage, setUserImage] = useState([]);
 
   const userDetails = useSelector((state) => state.userDetails);
@@ -163,6 +167,28 @@ const AddNewUserScreen = ({ match, history }) => {
       } else {
         setvariationDelete({ checked: false });
       }
+
+
+      
+      if (user.permissions && user.permissions.includes('orders.add')) {
+        setordersAdd({ checked: true });
+      } else {
+        setordersAdd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes('orders.update')) {
+        setordersUpdate({ checked: true });
+      } else {
+        setordersUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes('orders.delete')) {
+        setordersDelete({ checked: true });
+      } else {
+        setordersDelete({ checked: false });
+      }
+
+
     }
   }, [user]);
 

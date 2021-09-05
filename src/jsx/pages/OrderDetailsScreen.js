@@ -1,25 +1,29 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Badge, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Badge, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { listOrderDetailsById } from "../../actions/orderActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
-  const [order, setOrder] = useState(null);
-
-  const orderList = useSelector((state) => state.orderList);
-  const { loading, error, orders } = orderList;
+  const orderDetailsList = useSelector((state) => state.orderDetailsList);
+  const { loading, error, ordersDetails } = orderDetailsList;
 
   const orderId = match.params.id;
 
-  useLayoutEffect(() => {
-    orders.map((order) => {
-      if (order.id == orderId) {
-        setOrder(order);
-      }
-    });
-  }, [orderId]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    console.log('ok')
+    
+    if (orderId) {
+
+      dispatch(listOrderDetailsById(orderId));
+    }
+
+  }, [dispatch, orderId]);
 
   return (
     <>
@@ -29,7 +33,7 @@ const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
-          {order && (
+          {ordersDetails && (
             <Row>
               <Col md={8}>
                 <Card border="light" className="bg-white shadow-sm">
@@ -37,56 +41,59 @@ const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
                     <ListGroup variant="flush">
                       <ListGroup.Item>
                         <h2>
-                          {' '}
-                          {order.payment_status === 0 ? (
+                          {" "}
+                          {ordersDetails &&
+                          ordersDetails.payment_status === 0 ? (
                             <Badge variant="warning">pending</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
-                          {order.payment_status === 1 ? (
+                          {ordersDetails &&
+                          ordersDetails.payment_status === 1 ? (
                             <Badge variant="success">confirmed</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
-                          {order.payment_status === 2 ? (
+                          {ordersDetails.payment_status === 2 ? (
                             <Badge variant="primary">shipping</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
-                          {order.payment_status === 3 ? (
+                          {ordersDetails.payment_status === 3 ? (
                             <Badge variant="danger">rejected</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
-                          {order.payment_status === 4 ? (
+                          {ordersDetails.payment_status === 4 ? (
                             <Badge variant="secondary">delivered</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
-                          {order.payment_status === 5 ? (
+                          {ordersDetails.payment_status === 5 ? (
                             <Badge variant="danger">cancelled</Badge>
                           ) : (
-                            ''
+                            ""
                           )}
                         </h2>
                         <p>
-                          <strong>Name: </strong> {order.user.name}
+                          <strong>Name: </strong>{" "}
+                          {ordersDetails.user.name}
                         </p>
                         <p>
                           <strong>Email: </strong>
-                          {order.user.email}
+                          {ordersDetails.user.email}
                         </p>
                         <p>
                           <strong>Address: </strong>
-                          {order.address}
+                          {ordersDetails.address}
                         </p>
                         <p>
                           <strong>Phone: </strong>
-                          {order.phone}
+                          {ordersDetails.phone}
                         </p>
                         <p>
                           <strong>Whatsapp: </strong>
-                          {order.haswhatsapp === true ? 'Yes' : 'No'}
+                          {ordersDetails.haswhatsapp === true ? "Yes" : "No"}
                         </p>
                       </ListGroup.Item>
 
@@ -94,7 +101,7 @@ const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
                         <h2>Order Items</h2>
 
                         <ListGroup variant="flush">
-                          {order.products.map((item, index) => (
+                          {ordersDetails.products.map((item, index) => (
                             <ListGroup.Item key={index}>
                               <Row>
                                 {/*<Col md={1}>
@@ -144,25 +151,25 @@ const OrderDetailsScreen = ({ match, history, setHasVariant }) => {
                     <ListGroup.Item>
                       <Row>
                         <Col>Items</Col>
-                        <Col>{order.products.length}</Col>
+                        <Col>{ordersDetails.products.length}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>Shipping</Col>
-                        <Col>${order.delivery_charge}</Col>
+                        <Col>${ordersDetails.delivery_charge}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>Tax</Col>
-                        <Col>${order.tax}</Col>
+                        <Col>${ordersDetails.tax}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>Total</Col>
-                        <Col>${order.total_amount}</Col>
+                        <Col>${ordersDetails.total_amount}</Col>
                       </Row>
                     </ListGroup.Item>
                   </ListGroup>

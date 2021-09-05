@@ -4,6 +4,9 @@ import {
   ORDERSTATUS_FAIL,
   ORDERSTATUS_REQUEST,
   ORDERSTATUS_SUCCESS,
+  ORDER_DETAILS_LIST_FAIL,
+  ORDER_DETAILS_LIST_REQUEST,
+  ORDER_DETAILS_LIST_SUCCESS,
   ORDER_LIST_FAIL,
   ORDER_LIST_REQUEST,
   ORDER_LIST_SUCCESS,
@@ -40,6 +43,41 @@ export const listOrders = (pageNumber) => async (dispatch) => {
   }
 };
 
+export const listOrderDetailsById = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_DETAILS_LIST_REQUEST });
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.success.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `${BASE_URL}api/v2/admin/orders/${id}`,
+      config
+    );
+
+
+    dispatch({
+      type: ORDER_DETAILS_LIST_SUCCESS,
+      payload: data,
+    });
+
+    console.log(data);
+  } catch (error) {
+    dispatch({
+      type: ORDER_DETAILS_LIST_FAIL,
+      payload:
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message,
+    });
+  }
+};
+
 export const updateOrderStatus = (dispatch, formdata) => async () => {
   try {
     dispatch({
@@ -67,7 +105,6 @@ export const updateOrderStatus = (dispatch, formdata) => async () => {
     });
 
     dispatch(listOrders());
-
   } catch (error) {
     const message =
       error.response && error.response.data.error

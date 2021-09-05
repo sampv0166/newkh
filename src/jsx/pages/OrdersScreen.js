@@ -66,7 +66,7 @@ const OrdersScreen = ({ match, history }) => {
               <Card.Title></Card.Title>
             </Card.Header>
             <Card.Body>
-              <Table size="sm" className="table-responsive-xl mb-0">
+              <Table size="sm" className="table-responsive-md mb-0">
                 <thead>
                   <tr>
                     <th> Order Id</th>

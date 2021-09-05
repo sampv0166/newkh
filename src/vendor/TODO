@@ -17,7 +17,6 @@ Link to product page
 
 getallshops should give me only active shops
 
-
 {{baseurl}}/api/v2/admin/adminsearch?search=ab&type=shops
 
 
