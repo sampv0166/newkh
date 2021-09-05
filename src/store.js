@@ -1,6 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import {
   createUserReducer,
   userDeleteReducer,
@@ -8,7 +8,7 @@ import {
   userListReducer,
   userLoginReducer,
   userRegisterReducer,
-} from './reducers/userReducers';
+} from "./reducers/userReducers";
 import {
   productCreateReducer,
   productDeleteReducer,
@@ -16,21 +16,21 @@ import {
   productListReducer,
   productUpdateReducer,
   searchProductReducer,
-} from './reducers/productReducers';
+} from "./reducers/productReducers";
 import {
   categoryCreateReducer,
   categoryDeleteReducer,
   categoryDetailsReducer,
   categoryListReducer,
   categoryReducer,
-} from './reducers/categoryReducer';
+} from "./reducers/categoryReducer";
 import {
   allShopReducer,
   shopCreateReducer,
   shopDeleteReducer,
   shopDetailsReducer,
   shopReducer,
-} from './reducers/shopReducer';
+} from "./reducers/shopReducer";
 import {
   addVariationImageReducer,
   singleVariationCreateReducer,
@@ -38,14 +38,15 @@ import {
   variationDeleteReducer,
   variationImageDeleteReducer,
   variationUpdateReducer,
-} from './reducers/variationReducer';
+} from "./reducers/variationReducer";
 import {
   orderDetailsListReducer,
   orderListReducer,
   orderStatusUpdateReducer,
-} from './reducers/orderReducers';
-import { createPermissionReducer } from './reducers/PermissionsReducer';
-import { hasvariantReducer } from './reducers/hasVariantReducer';
+} from "./reducers/orderReducers";
+import { createPermissionReducer } from "./reducers/PermissionsReducer";
+import { hasvariantReducer } from "./reducers/hasVariantReducer";
+import { couponsListReducer } from "./reducers/couponsListReducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -87,12 +88,14 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
 
   permissionCreate: createPermissionReducer,
-
   hasvariant: hasvariantReducer,
+
+  
+  couponsList: couponsListReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
+const userInfoFromStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
 const initialState = {

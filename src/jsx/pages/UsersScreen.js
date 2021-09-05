@@ -62,7 +62,7 @@ const UsersScreen = ({ history, match }) => {
 
   const deleteUserHandler = async (id) => {
     let formdata = new FormData();
-    formdata.set('id', id);
+    formdata.set('user_id', id);
     if (window.confirm('Are you sure')) {
       dispatch(deleteUser(formdata));
     }

@@ -3,17 +3,17 @@ import React, {
   useEffect,
   useLayoutEffect,
   useState,
-} from 'react';
-import { Button, Card, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { deleteCategory, getCategory } from '../../actions/categoryActions';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import debounce from 'lodash.debounce';
+} from "react";
+import { Button, Card, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { deleteCategory, getCategory } from "../../actions/categoryActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import debounce from "lodash.debounce";
 
 const CategoryScreen = ({ history }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, categoryError, category } = categoryList;
 
@@ -28,8 +28,8 @@ const CategoryScreen = ({ history }) => {
 
   const deleteCategoryHandler = async (id) => {
     let formdata = new FormData();
-    formdata.set('id', id);
-    if (window.confirm('Are you sure')) {
+    formdata.set("id", id);
+    if (window.confirm("Are you sure")) {
       dispatch(deleteCategory(id, dispatch));
     }
   };
@@ -85,7 +85,7 @@ const CategoryScreen = ({ history }) => {
                       <tr key={index}>
                         <td
                           style={{
-                            cursor: 'pointer',
+                            cursor: "pointer",
                           }}
                           onClick={() => {
                             history.push(`/category/addcategory/${item.id}`);
@@ -95,7 +95,7 @@ const CategoryScreen = ({ history }) => {
                         </td>
                         <td
                           style={{
-                            cursor: 'pointer',
+                            cursor: "pointer",
                           }}
                           onClick={() => {
                             history.push(`/category/addcategory/${item.id}`);
@@ -105,7 +105,7 @@ const CategoryScreen = ({ history }) => {
                         </td>
                         <td
                           style={{
-                            cursor: 'pointer',
+                            cursor: "pointer",
                           }}
                           onClick={() => {
                             history.push(`/category/addcategory/${item.id}`);
@@ -113,9 +113,9 @@ const CategoryScreen = ({ history }) => {
                         >
                           <Card.Img
                             style={{
-                              height: '80px',
-                              width: '80px',
-                              objectFit: 'contain',
+                              height: "80px",
+                              width: "80px",
+                              objectFit: "contain",
                             }}
                             src={item.fullimageurl}
                             variant="top"
@@ -127,8 +127,8 @@ const CategoryScreen = ({ history }) => {
                             <i
                               className="fa fa-trash"
                               style={{
-                                cursor: 'pointer',
-                                color: 'red',
+                                cursor: "pointer",
+                                color: "red",
                               }}
                               onClick={() => deleteCategoryHandler(item.id)}
                             ></i>

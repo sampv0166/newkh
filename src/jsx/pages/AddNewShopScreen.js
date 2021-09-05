@@ -1,18 +1,18 @@
-import { ErrorMessage, Form, Formik } from 'formik';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { ErrorMessage, Form, Formik } from "formik";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Card, Col, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createShop,
   listShopDetails,
   listShops,
-} from '../../actions/shopActions';
-import * as Yup from 'yup';
-import TextField from '../components/TextField';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
+} from "../../actions/shopActions";
+import * as Yup from "yup";
+import TextField from "../components/TextField";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
-import CheckboxGroup from '../components/CheckboxGroup';
+import CheckboxGroup from "../components/CheckboxGroup";
 const AddNewShopScreen = ({ match, history }) => {
   const [currentShop, setCurrentShop] = useState([]);
   const [shopBannerImage, setShopBannerImage] = useState([]);
@@ -20,9 +20,9 @@ const AddNewShopScreen = ({ match, history }) => {
   const [active, setActive] = useState({ checked: false });
 
   const [permissions, setPermissions] = useState([
-    { key: 'add', value: 'add' },
-    { key: 'update', value: 'update' },
-    { key: 'delete', value: 'delete' },
+    { key: "add", value: "add" },
+    { key: "update", value: "update" },
+    { key: "delete", value: "delete" },
   ]);
 
   const shopId = match.params.id;
@@ -33,6 +33,9 @@ const AddNewShopScreen = ({ match, history }) => {
   const shopCreate = useSelector((state) => state.shopCreate);
   const { loading: loadingcreate, error: errorcreate } = shopCreate;
 
+  const shopList = useSelector((state) => state.shopList);
+  const { loading: shoploadingcreate, error: shoperrorcreate } = shopList;
+
   const dispatch = useDispatch();
 
   const handleImageChange = (e, formik) => {
@@ -42,7 +45,7 @@ const AddNewShopScreen = ({ match, history }) => {
       URL.revokeObjectURL(e.target.files);
     }
 
-    formik.setFieldValue('image', e.currentTarget.files[0]);
+    formik.setFieldValue("image", e.currentTarget.files[0]);
   };
 
   useEffect(() => {
@@ -67,11 +70,11 @@ const AddNewShopScreen = ({ match, history }) => {
   }, [dispatch, shopId]);
 
   const validate = Yup.object({
-    shop_name_en: Yup.string().required('Required'),
-    email: Yup.string().email('Email is invalid').required('Email is required'),
+    shop_name_en: Yup.string().required("Required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     image:
-      Yup.mixed().required('required') || Yup.string().required('required'),
-    password: Yup.string().required('Required'),
+      Yup.mixed().required("required") || Yup.string().required("required"),
+    password: Yup.string().required("Required"),
     shop_trn: Yup.string(),
     shop_mob: Yup.string(),
     shop_website: Yup.string(),
@@ -79,8 +82,8 @@ const AddNewShopScreen = ({ match, history }) => {
 
   const handleSubmit = async (formdata) => {
     dispatch(createShop(dispatch, formdata));
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    if (userInfo.user.typeofuser === 'S') {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo.user.typeofuser === "S") {
       dispatch(listShops(1));
     }
     history.goBack();
@@ -88,53 +91,55 @@ const AddNewShopScreen = ({ match, history }) => {
 
   return (
     <>
-      {loading || loadingcreate ? (
+      {loading || loadingcreate || shoploadingcreate ? (
         <Loader />
-      ) : error || errorcreate ? (
-        <Message variant="danger">{error || errorcreate}</Message>
+      ) : error || errorcreate || shoperrorcreate ? (
+        <Message variant="danger">
+          {error || errorcreate || shoperrorcreate}
+        </Message>
       ) : (
         <Formik
           enableReinitialize
           initialValues={{
-            shop_name_en: (shop && shop.shop_name_en) || '',
-            email: (shop && shop.shop_email) || '',
-            image: (shop && shop.coverimage) || '',
-            password: '',
-            shop_trn: (shop && shop.shop_trn) || '',
-            shop_mob: (shop && shop.shop_mob) || '',
-            shop_website: (shop && shop.shop_website) || '',
-            open: (shop && shop.open) || '',
-            isactive: (shop && shop.false) || '',
-            name: (shop && shop.name) || '',
+            shop_name_en: (shop && shop.shop_name_en) || "",
+            email: (shop && shop.shop_email) || "",
+            image: (shop && shop.coverimage) || "",
+            password: "",
+            shop_trn: (shop && shop.shop_trn) || "",
+            shop_mob: (shop && shop.shop_mob) || "",
+            shop_website: (shop && shop.shop_website) || "",
+            open: (shop && shop.open) || "",
+            isactive: (shop && shop.false) || "",
+            name: (shop && shop.name) || "",
           }}
           validationSchema={validate}
           onSubmit={(values) => {
             let formdata = new FormData();
 
             if (shopId) {
-              formdata.append('id', shopId);
+              formdata.append("id", shopId);
             }
 
-            formdata.append('shop_name_en', values.shop_name_en);
-            formdata.append('shop_name_ar', values.shop_name_en);
-            formdata.append('name_en', values.shop_name_en);
-            formdata.append('email', values.email);
-            if (typeof values.image === 'string') {
-              formdata.delete('image');
+            formdata.append("shop_name_en", values.shop_name_en);
+            formdata.append("shop_name_ar", values.shop_name_en);
+            formdata.append("name_en", values.shop_name_en);
+            formdata.append("email", values.email);
+            if (typeof values.image === "string") {
+              formdata.delete("image");
             } else {
-              formdata.append('image', values.image);
+              formdata.append("image", values.image);
             }
-            formdata.append('password', values.password);
-            formdata.append('shop_trn', values.shop_trn);
-            formdata.append('shop_mob', values.shop_mob);
-            formdata.append('shop_website', values.shop_website);
+            formdata.append("password", values.password);
+            formdata.append("shop_trn", values.shop_trn);
+            formdata.append("shop_mob", values.shop_mob);
+            formdata.append("shop_website", values.shop_website);
             values.open === true
-              ? formdata.append('open', 1)
-              : formdata.append('open', 0);
+              ? formdata.append("open", 1)
+              : formdata.append("open", 0);
 
             values.isactive === true
-              ? formdata.append('status', 1)
-              : formdata.append('status', 0);
+              ? formdata.append("status", 1)
+              : formdata.append("status", 0);
 
             let permissionlsit = {
               product: values.product,
@@ -144,7 +149,7 @@ const AddNewShopScreen = ({ match, history }) => {
             };
 
             permissionlsit = JSON.stringify(permissionlsit);
-            formdata.append('add_permission[]', permissionlsit);
+            formdata.append("add_permission[]", permissionlsit);
 
             handleSubmit(formdata);
           }}
@@ -158,10 +163,10 @@ const AddNewShopScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: '280px', objectFit: 'cover' }}
+                          style={{ height: "280px", objectFit: "cover" }}
                         >
                           <Card.Img
-                            style={{ height: '270px', objectFit: 'contain' }}
+                            style={{ height: "270px", objectFit: "contain" }}
                             src={shopBannerImage}
                             variant="top"
                           />
@@ -177,7 +182,7 @@ const AddNewShopScreen = ({ match, history }) => {
                             <ErrorMessage
                               component="div"
                               className="error text-danger"
-                              name={'image'}
+                              name={"image"}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
                             New Image
@@ -188,10 +193,10 @@ const AddNewShopScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: '280px', objectFit: 'cover' }}
+                          style={{ height: "280px", objectFit: "cover" }}
                         >
                           <Card.Img
-                            style={{ height: '270px', objectFit: 'contain' }}
+                            style={{ height: "270px", objectFit: "contain" }}
                             src={shopBannerImage}
                             variant="top"
                           />
@@ -207,7 +212,7 @@ const AddNewShopScreen = ({ match, history }) => {
                             <ErrorMessage
                               component="div"
                               className="error text-danger"
-                              name={'image'}
+                              name={"image"}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
                             New Image
@@ -277,7 +282,7 @@ const AddNewShopScreen = ({ match, history }) => {
                                 ? (d = false)
                                 : (d = true);
                               setActive({ checked: d });
-                              formik.setFieldValue('isactive', d);
+                              formik.setFieldValue("isactive", d);
                             }}
                           />
                           <label
@@ -302,7 +307,7 @@ const AddNewShopScreen = ({ match, history }) => {
                                   ? (d = false)
                                   : (d = true);
                                 setopen({ checked: d });
-                                formik.setFieldValue('open', d);
+                                formik.setFieldValue("open", d);
                               }}
                             />
                             <label
@@ -324,8 +329,6 @@ const AddNewShopScreen = ({ match, history }) => {
                       </Col>
                     </Row>
                   </div>
-
-                
                 </div>
               </Form>
             </div>

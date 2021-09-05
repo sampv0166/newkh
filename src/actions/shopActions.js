@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { BASE_URL } from '../constants/Globals';
+import axios from "axios";
+import { BASE_URL } from "../constants/Globals";
 import {
   ALL_SHOP_FAIL,
   ALL_SHOP_REQUEST,
@@ -16,24 +16,26 @@ import {
   SHOP_FAIL,
   SHOP_REQUEST,
   SHOP_SUCCESS,
-} from '../constants/shopConstants';
-import { createPermission } from './permissionActions';
+} from "../constants/shopConstants";
+import { createPermission } from "./permissionActions";
 
 export const listShops = (pageNumber, history, keyword) => async (dispatch) => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const config = {
     headers: {
       Authorization: `Bearer ${userInfo.success.token}`,
     },
   };
-  if (keyword === '' || keyword === undefined || keyword === null) {
-    if (userInfo.user.typeofuser === 'A') {
+  if (keyword === "" || keyword === undefined || keyword === null) {
+    if (userInfo.user.typeofuser === "A") {
+      listShopDetails(userInfo.user.shop_id);
       history.push(`/shops/createshop/${userInfo.user.shop_id}`);
       return;
     }
 
-    if (userInfo.user.typeofuser === 'U') {
+    if (userInfo.user.typeofuser === "U") {
+      listShopDetails(userInfo.user.shop_id);
       history.push(`/shops/createshop/${userInfo.user.shop_id}`);
       return;
     }
@@ -59,14 +61,16 @@ export const listShops = (pageNumber, history, keyword) => async (dispatch) => {
       });
     }
   } else {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    if (userInfo.user.typeofuser === 'A') {
+    if (userInfo.user.typeofuser === "A") {
+      listShopDetails(userInfo.user.shop_id);
       history.push(`/shops/createshop/${userInfo.user.shop_id}`);
       return;
     }
 
-    if (userInfo.user.typeofuser === 'U') {
+    if (userInfo.user.typeofuser === "U") {
+      listShopDetails(userInfo.user.shop_id);
       history.push(`/shops/createshop/${userInfo.user.shop_id}`);
       return;
     }
@@ -96,7 +100,7 @@ export const listShops = (pageNumber, history, keyword) => async (dispatch) => {
 };
 
 export const getAllShops = () => async (dispatch) => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const config = {
     headers: {
@@ -106,13 +110,13 @@ export const getAllShops = () => async (dispatch) => {
 
   try {
     dispatch({ type: ALL_SHOP_REQUEST });
-    const  data  = await axios.get(
+    const data = await axios.get(
       `${BASE_URL}api/v2/admin/allshops`,
       config
 
       //`${BASE_URL}api/v2/public/shop?page=${pageNumber}`
     );
-    console.log(data)
+    console.log(data);
     dispatch({
       type: ALL_SHOP_SUCCESS,
       payload: data,
@@ -132,7 +136,7 @@ export const listShopDetails = (shopId) => async (dispatch) => {
   try {
     dispatch({ type: SHOP_DETAILS_REQUEST });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
@@ -166,11 +170,11 @@ export const createShop = (dispatch, formdata) => async () => {
       type: SHOP_CREATE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -186,7 +190,7 @@ export const createShop = (dispatch, formdata) => async () => {
       payload: data,
     });
 
-    if (userInfo.user.typeofuser === 'S') {
+    if (userInfo.user.typeofuser === "S") {
       dispatch(listShops(1));
     }
   } catch (error) {
@@ -210,17 +214,17 @@ export const deleteShop = (formdata) => async (dispatch, getState) => {
       type: SHOP_DELETE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
 
     await axios.post(`${BASE_URL}api/v2/admin/deleteshop`, formdata, config);
-    if (userInfo.user.typeofuser === 'S') {
+    if (userInfo.user.typeofuser === "S") {
       dispatch(listShops(1));
     }
 
@@ -232,7 +236,7 @@ export const deleteShop = (formdata) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === 'Not authorized, token failed') {
+    if (message === "Not authorized, token failed") {
       ///dispatch(logout())
     }
     dispatch({

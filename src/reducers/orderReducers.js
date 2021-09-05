@@ -42,12 +42,14 @@ export const orderDetailsListReducer = (
         ordersDetails: action.payload.data,
       };
     case ORDER_DETAILS_LIST_FAIL:
-      return { loading: false, error: action.payload };
+      return {
+        loading: false,
+        error: action.payload,
+      };
     default:
       return state;
   }
 };
-
 
 export const orderStatusUpdateReducer = (
   state = { orderStatus: [] },

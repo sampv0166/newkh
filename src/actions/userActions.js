@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   USER_CREATE_FAIL,
   USER_CREATE_REQUEST,
@@ -20,10 +20,10 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
-} from '../constants/userConstants';
+} from "../constants/userConstants";
 
-import { BASE_URL } from '../constants/Globals';
-import { createPermission } from './permissionActions';
+import { BASE_URL } from "../constants/Globals";
+import { createPermission, updatePermission } from "./permissionActions";
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -33,7 +33,7 @@ export const login = (email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
@@ -48,7 +48,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -68,7 +68,7 @@ export const register = (name, email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
@@ -88,7 +88,7 @@ export const register = (name, email, password) => async (dispatch) => {
     //   payload: data,
     // })
 
-    document.location.href = '/page-login';
+    document.location.href = "/page-login";
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -101,20 +101,20 @@ export const register = (name, email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch, history) => {
-  localStorage.removeItem('userInfo');
+  localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   //dispatch({ type: USER_DETAILS_RESET })
 
-  document.location.href = '/page-login';
+  document.location.href = "/page-login";
 };
 
 export const listUsers = (pageNumber, keyword) => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -123,14 +123,14 @@ export const listUsers = (pageNumber, keyword) => async (dispatch) => {
 
     let resdata;
 
-    if (keyword === '' || keyword === undefined || keyword === null) {
+    if (keyword === "" || keyword === undefined || keyword === null) {
       const { data } = await axios.get(
         `${BASE_URL}api/v2/admin/users?page=${pageNumber}`,
         config
       );
       resdata = data;
     } else {
-      const  data  = await axios.get(
+      const data = await axios.get(
         `${BASE_URL}api/v2/admin/adminsearch?search=${keyword}&type=users`,
         config
       );
@@ -160,11 +160,11 @@ export const deleteUser = (formdata) => async (dispatch, getState) => {
       type: USER_DELETE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -181,7 +181,7 @@ export const deleteUser = (formdata) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === 'Not authorized, token failed') {
+    if (message === "Not authorized, token failed") {
       ///dispatch(logout())
     }
     dispatch({
@@ -195,7 +195,7 @@ export const listUserDetails = (shopId) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
@@ -223,17 +223,17 @@ export const listUserDetails = (shopId) => async (dispatch) => {
   }
 };
 
-export const createUser = (dispatch, formdata, values) => async () => {
+export const createUser = (dispatch, formdata, values, userId) => async () => {
   try {
     dispatch({
       type: USER_CREATE_REQUEST,
     });
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${userInfo.success.token}`,
       },
     };
@@ -244,19 +244,29 @@ export const createUser = (dispatch, formdata, values) => async () => {
       config
     );
 
-    formdata.delete('id');
-    formdata.set('user_id', data.success.id);
+    formdata.delete("user_id");
+    if (userId) {
+      formdata.set("user_id", userId);
+    } else {
+      formdata.set("user_id", data.success.id);
+    }
 
     let submit = false;
 
     for (var pair of formdata.entries()) {
-      if (pair[0] === 'add_permission[]') {
+      if (pair[0] === "add_permission[]") {
         submit = true;
       }
-      console.log(pair[0] + ', ' + pair[1]);
+      console.log(pair[0] + ", " + pair[1]);
     }
+
     if (submit) {
-      dispatch(createPermission(dispatch, formdata));
+      if (userId) {
+  
+        dispatch(updatePermission(dispatch, formdata));
+      } else {
+        dispatch(createPermission(dispatch, formdata));
+      }
     }
 
     dispatch({

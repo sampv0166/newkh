@@ -55,18 +55,18 @@ export const listOrderDetailsById = (id) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.get(
+    const  data  = await axios.get(
       `${BASE_URL}api/v2/admin/orders/${id}`,
       config
     );
 
+    console.log(data)
 
     dispatch({
       type: ORDER_DETAILS_LIST_SUCCESS,
       payload: data,
     });
 
-    console.log(data);
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_LIST_FAIL,

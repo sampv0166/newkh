@@ -1,22 +1,21 @@
 important 
 ----------
-not getting all productdetails on get orderdetails
-SHOPTRN ISSUE
-API TO DELETE A USER
-get all shops with permission for admin
 shop password update
-When logged in as shop admin -> return only employees belong to that shop
 EVEN IF IGIVE PERMISSION TO EXMPLOYEE IT DOESNT LET ME ADD
 
 
-Orders
-Fix order table
-Show order details in table with image
-Link to product page
+users also listing shops admin
+switch ar_name and en_name
 
 
-getallshops should give me only active shops
+modify shop password as super admin
+modify shop password as shop admin
 
-{{baseurl}}/api/v2/admin/adminsearch?search=ab&type=shops
 
+
+setting shop as inactive(status) still shows in mobile app
+
+when adding new shop automatically add permissions
+
+api to update user
 
