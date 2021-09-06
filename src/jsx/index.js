@@ -112,6 +112,7 @@ import AddNewUserScreen from "./pages/AddNewUserScreen";
 import Loader from "./components/Loader";
 import Message from "./components/Message";
 import CouponsScreen from "./pages/CouponsScreen";
+import AddNewCouponscreen from "./pages/AddNewCouponscreen";
 
 const Markup = ({ history }) => {
   const [hasVariant, setHasVariant] = useState({ checked: false });
@@ -214,6 +215,14 @@ const Markup = ({ history }) => {
         <div className="content-body">
           <div className="container-fluid">
             <Switch>
+              {routes.map((data, i) => (
+                <Route
+                  key={i}
+                  exact
+                  path={`/${data.url}`}
+                  component={data.component}
+                />
+              ))}
               <PrivateRoute
                 exact
                 path="/react"
@@ -377,6 +386,30 @@ const Markup = ({ history }) => {
 
               <PrivateRoute
                 exact
+                path="/addnewcoupon"
+                render={({ match, history, location }) => (
+                  <AddNewCouponscreen
+                    match={match}
+                    history={history}
+                    location={location}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
+                path="/coupon/edit/:id"
+                render={({ match, history, location }) => (
+                  <AddNewCouponscreen
+                    match={match}
+                    history={history}
+                    location={location}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
                 path="/category/addcategory"
                 render={({ match, history, location }) => (
                   <AddNewCategoryScreen
@@ -445,6 +478,14 @@ const Markup = ({ history }) => {
         path="/page-login"
         render={({ match, history, location }) => (
           <LoginScreen match={match} history={history} location={location} />
+        )}
+      ></Route>
+
+      <Route
+        exact
+        path="/error"
+        render={({ match, history, location }) => (
+          <Error400 match={match} history={history} location={location} />
         )}
       ></Route>
     </Router>

@@ -1,19 +1,20 @@
-import React, { useCallback, useState } from 'react';
-import { useLayoutEffect } from 'react';
-import { Button, Card, Nav, Pagination, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useState } from "react";
+import { useLayoutEffect } from "react";
+import { Button, Card, Nav, Pagination, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   deleteUser,
   listUserDetails,
   listUsers,
-} from '../../actions/userActions';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import debounce from 'lodash.debounce';
+} from "../../actions/userActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import debounce from "lodash.debounce";
+import checkPermission, { checkPermissionOnSubmit } from "./checkpermission";
 
 const UsersScreen = ({ history, match }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const userList = useSelector((state) => state.userList);
   const { loading, error, users, pages, page } = userList;
 
@@ -52,9 +53,9 @@ const UsersScreen = ({ history, match }) => {
   const pag = (size, gutter, variant, bg, circle) => (
     <Pagination
       size={size}
-      className={`mt-4 mb-2 ${gutter ? 'pagination-gutter' : ''} ${
+      className={`mt-4 mb-2 ${gutter ? "pagination-gutter" : ""} ${
         variant && `pagination-${variant}`
-      } ${!bg && 'no-bg'} ${circle && 'pagination-circle'}`}
+      } ${!bg && "no-bg"} ${circle && "pagination-circle"}`}
     >
       {items}
     </Pagination>
@@ -62,8 +63,8 @@ const UsersScreen = ({ history, match }) => {
 
   const deleteUserHandler = async (id) => {
     let formdata = new FormData();
-    formdata.set('user_id', id);
-    if (window.confirm('Are you sure')) {
+    formdata.set("user_id", id);
+    if (window.confirm("Are you sure")) {
       dispatch(deleteUser(formdata));
     }
   };
@@ -86,7 +87,7 @@ const UsersScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
-          {' '}
+          {" "}
           <div className="d-flex justify-content-between my-4">
             <div className="d-flex w-50">
               <input
@@ -124,53 +125,60 @@ const UsersScreen = ({ history, match }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users && users.map((item, index) => (
-                    <tr>
-                      <td>
-                        <strong>{item.id}</strong>
-                      </td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <img
-                            src={item.photo}
-                            className="rounded-lg mr-2"
-                            width="24"
-                            alt=""
-                          />{' '}
-                          <span className="w-space-no">{item.name} </span>
-                        </div>
-                      </td>
-                      <td>{item.email} </td>
-                      <td>{item.typeofuser}</td>
+                  {users &&
+                    users.map((item, index) => (
+                      <tr>
+                        <td>
+                          <strong>{item.id}</strong>
+                        </td>
+                        <td>
+                          <div className="d-flex align-items-center">
+                            <img
+                              src={item.photo}
+                              className="rounded-lg mr-2"
+                              width="24"
+                              alt=""
+                            />{" "}
+                            <span className="w-space-no">{item.name} </span>
+                          </div>
+                        </td>
+                        <td>{item.email} </td>
+                        <td>{item.typeofuser}</td>
 
-                      <td>
-                        <div className="d-flex">
-                          <Link
-                            to={`/users/edit/${item.id}`}
-                            className="btn btn-primary shadow btn-xs sharp mr-1"
-                          >
-                            <i className="fa fa-pencil"></i>
-                          </Link>
-                          <Link
-                            to={`/usersList/page/${pageNumber}`}
-                            className="btn btn-danger shadow btn-xs sharp"
-                          >
-                            <i
-                              className="fa fa-trash"
-                              onClick={() => {
-                                deleteUserHandler(item.id);
-                              }}
-                            ></i>
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        <td>
+                          <div className="d-flex">
+                            <Link
+                              to={`/users/edit/${item.id}`}
+                              className="btn btn-primary shadow btn-xs sharp mr-1"
+                            >
+                              <i className="fa fa-pencil"></i>
+                            </Link>
+                            <div
+                              to={`/usersList/page/${pageNumber}`}
+                              className="btn btn-danger shadow btn-xs sharp"
+                            >
+                              <i
+                                className="fa fa-trash"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (checkPermissionOnSubmit("users.delete")) {
+                                    history.push("/error");
+
+                                    return;
+                                  }
+                                  deleteUserHandler(item.id);
+                                }}
+                              ></i>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
             </Card.Body>
           </Card>
-          <Nav>{pag('', true, 'danger', true, false)}</Nav>
+          <Nav>{pag("", true, "danger", true, false)}</Nav>
         </div>
       )}
     </>

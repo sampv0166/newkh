@@ -46,7 +46,12 @@ import {
 } from "./reducers/orderReducers";
 import { createPermissionReducer } from "./reducers/PermissionsReducer";
 import { hasvariantReducer } from "./reducers/hasVariantReducer";
-import { couponsListReducer } from "./reducers/couponsListReducer";
+import {
+  couponCreateReducer,
+  couponDeleteReducer,
+  couponDetailsReducer,
+  couponsListReducer,
+} from "./reducers/couponsListReducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -90,8 +95,10 @@ const reducer = combineReducers({
   permissionCreate: createPermissionReducer,
   hasvariant: hasvariantReducer,
 
-  
   couponsList: couponsListReducer,
+  couponDetails: couponDetailsReducer,
+  couponCreate: couponCreateReducer,
+  couponDelete : couponDeleteReducer
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

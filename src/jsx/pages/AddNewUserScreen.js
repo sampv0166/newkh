@@ -15,6 +15,7 @@ import Select from "../components/Select";
 import { getCategory } from "../../actions/categoryActions";
 import { getAllShops, listShops } from "../../actions/shopActions";
 import checkbox from "../components/checkbox";
+import checkPermission, { checkPermissionOnSubmit } from "./checkpermission";
 
 const AddNewUserScreen = ({ match, history }) => {
   const [prodAdd, setProdadd] = useState({ checked: false });
@@ -36,6 +37,14 @@ const AddNewUserScreen = ({ match, history }) => {
   const [ordersAdd, setordersAdd] = useState({ checked: false });
   const [ordersUpdate, setordersUpdate] = useState({ checked: false });
   const [ordersDelete, setordersDelete] = useState({ checked: false });
+
+  const [usersAdd, setusersAdd] = useState({ checked: false });
+  const [usersUpdate, setusersUpdate] = useState({ checked: false });
+  const [usersDelete, setusersDelete] = useState({ checked: false });
+
+  const [couponAdd, setcouponAdd] = useState({ checked: false });
+  const [couponUpdate, setcouponUpdate] = useState({ checked: false });
+  const [couponDelete, setcouponDelete] = useState({ checked: false });
 
   const [userImage, setUserImage] = useState([]);
 
@@ -185,10 +194,54 @@ const AddNewUserScreen = ({ match, history }) => {
       } else {
         setordersDelete({ checked: false });
       }
+
+      if (user.permissions && user.permissions.includes("users.add")) {
+        setusersAdd({ checked: true });
+      } else {
+        setusersAdd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("users.update")) {
+        setusersUpdate({ checked: true });
+      } else {
+        setusersUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("users.delete")) {
+        setusersDelete({ checked: true });
+      } else {
+        setusersDelete({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("coupon.add")) {
+        setcouponAdd({ checked: true });
+      } else {
+        setcouponAdd({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("coupon.update")) {
+        setcouponUpdate({ checked: true });
+      } else {
+        setcouponUpdate({ checked: false });
+      }
+
+      if (user.permissions && user.permissions.includes("coupon.delete")) {
+        setcouponDelete({ checked: true });
+      } else {
+        setcouponDelete({ checked: false });
+      }
     }
   }, [user]);
 
   useLayoutEffect(() => {
+    checkPermission(history, "users.add");
+    if (userId) {
+      if (checkPermissionOnSubmit("users.update")) {
+        history.push("/error");
+        return;
+      }
+    }
+
     if (userInfo.user.typeofuser === "S") {
       dispatch(getAllShops());
     }
@@ -241,6 +294,14 @@ const AddNewUserScreen = ({ match, history }) => {
             ordersadd: false,
             ordersdelete: false,
             ordersupdate: false,
+
+            usersadd: false,
+            usersdelete: false,
+            usersupdate: false,
+
+            couponadd: false,
+            coupondelete: false,
+            couponupdate: false,
 
             name: (userId && user.name) || "",
             email: (userId && user.email) || "",
@@ -321,6 +382,42 @@ const AddNewUserScreen = ({ match, history }) => {
               formdata.append("add_permission[]", "variation.delete");
             }
 
+            if (ordersAdd.checked) {
+              formdata.append("add_permission[]", "orders.add");
+            }
+
+            if (ordersUpdate.checked) {
+              formdata.append("add_permission[]", "orders.update");
+            }
+
+            if (ordersDelete.checked) {
+              formdata.append("add_permission[]", "orders.delete");
+            }
+
+            if (usersAdd.checked) {
+              formdata.append("add_permission[]", "users.add");
+            }
+
+            if (usersUpdate.checked) {
+              formdata.append("add_permission[]", "users.update");
+            }
+
+            if (usersDelete.checked) {
+              formdata.append("add_permission[]", "users.delete");
+            }
+
+            if (couponAdd.checked) {
+              formdata.append("add_permission[]", "coupon.add");
+            }
+
+            if (couponUpdate.checked) {
+              formdata.append("add_permission[]", "coupon.update");
+            }
+
+            if (couponDelete.checked) {
+              formdata.append("add_permission[]", "coupon.delete");
+            }
+
             handleSubmit(formdata, values);
           }}
         >
@@ -333,12 +430,21 @@ const AddNewUserScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
+                          style={{
+                            height: "280px",
+                            objectFit: "cover",
+                            borderRadius: "50%",
+                          }}
                         >
                           <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                            style={{
+                              height: "270px",
+                              objectFit: "contain",
+                              borderRadius: "50%",
+                            }}
                             src={userImage}
                             variant="top"
+                            rounded
                           />
                         </Card>
 
@@ -363,12 +469,21 @@ const AddNewUserScreen = ({ match, history }) => {
                       <div>
                         <Card
                           className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
+                          style={{
+                            height: "280px",
+                            objectFit: "cover",
+                            borderRadius: "50%",
+                          }}
                         >
                           <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                            style={{
+                              height: "270px",
+                              objectFit: "contain",
+                              borderRadius: "50%",
+                            }}
                             src={userImage}
                             variant="top"
+                            rounded
                           />
                         </Card>
 
@@ -635,6 +750,156 @@ const AddNewUserScreen = ({ match, history }) => {
                             : (d = true);
                           setvariationDelete({ checked: d });
                           formik.setFieldValue("variationDelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
+                  </Col>
+
+                  <Col className="col-md-6 my-4">
+                    Orders Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={ordersAdd.checked}
+                        onChange={(d) => {
+                          ordersAdd.checked === true ? (d = false) : (d = true);
+                          setordersAdd({ checked: d });
+                          formik.setFieldValue("ordersadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={ordersUpdate.checked}
+                        onChange={(d) => {
+                          ordersUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setordersUpdate({ checked: d });
+                          formik.setFieldValue("ordersupdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={ordersDelete.checked}
+                        onChange={(d) => {
+                          ordersDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setordersDelete({ checked: d });
+                          formik.setFieldValue("ordersdelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
+                  </Col>
+
+                  <Col className="col-md-6 my-4">
+                    Users Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={usersAdd.checked}
+                        onChange={(d) => {
+                          usersAdd.checked === true ? (d = false) : (d = true);
+                          setusersAdd({ checked: d });
+                          formik.setFieldValue("usersadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={usersUpdate.checked}
+                        onChange={(d) => {
+                          usersUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setusersUpdate({ checked: d });
+                          formik.setFieldValue("usersupdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={usersDelete.checked}
+                        onChange={(d) => {
+                          usersDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setusersDelete({ checked: d });
+                          formik.setFieldValue("usersdelete", d);
+                        }}
+                      />
+                      <label className="form-check-label">Delete</label>
+                    </div>
+                  </Col>
+
+                  <Col className="col-md-6 my-4">
+                    Coupon Permissions
+                    <div className="form-check form-switch my-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={couponAdd.checked}
+                        onChange={(d) => {
+                          couponAdd.checked === true ? (d = false) : (d = true);
+                          setcouponAdd({ checked: d });
+                          formik.setFieldValue("couponadd", d);
+                        }}
+                      />
+                      <label className="form-check-label">Add</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={couponUpdate.checked}
+                        onChange={(d) => {
+                          couponUpdate.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setcouponUpdate({ checked: d });
+                          formik.setFieldValue("couponupdate", d);
+                        }}
+                      />
+                      <label className="form-check-label">Update</label>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={couponDelete.checked}
+                        onChange={(d) => {
+                          couponDelete.checked === true
+                            ? (d = false)
+                            : (d = true);
+                          setcouponDelete({ checked: d });
+                          formik.setFieldValue("coupondelete", d);
                         }}
                       />
                       <label className="form-check-label">Delete</label>

@@ -1,19 +1,20 @@
-import React from 'react';
-import { useLayoutEffect } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from "react";
+import { useLayoutEffect } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createCategory,
   getCategory,
   listCategoryDetails,
-} from '../../actions/categoryActions';
-import * as Yup from 'yup';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import { ErrorMessage, Form, Formik } from 'formik';
-import { Card, Col } from 'react-bootstrap';
-import TextField from '../components/TextField';
+} from "../../actions/categoryActions";
+import * as Yup from "yup";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import { ErrorMessage, Form, Formik } from "formik";
+import { Card, Col } from "react-bootstrap";
+import TextField from "../components/TextField";
+import checkPermission, { checkPermissionOnSubmit } from "./checkpermission";
 
 const AddNewCategoryScreen = ({ match, history }) => {
   const [categoryImage, setCategoryImage] = useState([]);
@@ -35,7 +36,7 @@ const AddNewCategoryScreen = ({ match, history }) => {
       URL.revokeObjectURL(e.target.files);
     }
 
-    formik.setFieldValue('image', e.currentTarget.files[0]);
+    formik.setFieldValue("image", e.currentTarget.files[0]);
   };
 
   useEffect(() => {
@@ -50,18 +51,20 @@ const AddNewCategoryScreen = ({ match, history }) => {
   }, [category]);
 
   useLayoutEffect(() => {
+    checkPermission(history, "category.add");
+
     dispatch(listCategoryDetails(categoryId));
   }, [dispatch, categoryId]);
 
   const validate = Yup.object({
     name_en: Yup.string()
-      .min(1, 'Name must be atleast one character')
-      .required('Required'),
+      .min(1, "Name must be atleast one character")
+      .required("Required"),
     name_ar: Yup.string()
-      .min(1, 'Name must be atleast one character')
-      .required('Required'),
+      .min(1, "Name must be atleast one character")
+      .required("Required"),
     image:
-      Yup.mixed().required('required') || Yup.string().required('required'),
+      Yup.mixed().required("required") || Yup.string().required("required"),
   });
 
   const handleSubmit = async (formdata) => {
@@ -69,7 +72,7 @@ const AddNewCategoryScreen = ({ match, history }) => {
 
     dispatch(getCategory());
 
-    history.push('/category');
+    history.push("/category");
   };
 
   return (
@@ -82,32 +85,39 @@ const AddNewCategoryScreen = ({ match, history }) => {
         <Formik
           enableReinitialize
           initialValues={{
-            name_en: (category && category.name_en) || '',
-            name_ar: (category && category.name_ar) || '',
-            isactive: (category && category.active) || '',
-            image: (category && category.fullimageurl) || '',
+            name_en: (category && category.name_en) || "",
+            name_ar: (category && category.name_ar) || "",
+            isactive: (category && category.active) || "",
+            image: (category && category.fullimageurl) || "",
           }}
           validationSchema={validate}
           onSubmit={(values) => {
+            if (categoryId) {
+              if (checkPermissionOnSubmit("category.update")) {
+                history.push("/error");
+                return;
+              }
+            }
+
             let formdata = new FormData();
 
             if (categoryId) {
-              formdata.append('id', categoryId);
+              formdata.append("id", categoryId);
             }
 
-            formdata.append('name_en', values.name_en);
-            formdata.append('name_ar', values.name_ar);
+            formdata.append("name_en", values.name_en);
+            formdata.append("name_ar", values.name_ar);
 
             if (values.isactive === true) {
-              formdata.append('active', 1);
+              formdata.append("active", 1);
             } else {
-              formdata.append('active', 0);
+              formdata.append("active", 0);
             }
 
-            if (typeof values.image === 'string') {
-              formdata.delete('image');
+            if (typeof values.image === "string") {
+              formdata.delete("image");
             } else {
-              formdata.append('image', values.image);
+              formdata.append("image", values.image);
             }
 
             handleSubmit(formdata);
@@ -120,10 +130,10 @@ const AddNewCategoryScreen = ({ match, history }) => {
                   <div>
                     <Card
                       className="my-2 p-1 rounded"
-                      style={{ height: '280px', objectFit: 'cover' }}
+                      style={{ height: "280px", objectFit: "cover" }}
                     >
                       <Card.Img
-                        style={{ height: '270px', objectFit: 'contain' }}
+                        style={{ height: "270px", objectFit: "contain" }}
                         src={categoryImage}
                         variant="top"
                       />
@@ -139,7 +149,7 @@ const AddNewCategoryScreen = ({ match, history }) => {
                         <ErrorMessage
                           component="div"
                           className="error text-danger"
-                          name={'image'}
+                          name={"image"}
                         />
                         <i className="bx bx-cloud-upload mx-2"></i>Upload New
                         Image
@@ -150,10 +160,10 @@ const AddNewCategoryScreen = ({ match, history }) => {
                   <div>
                     <Card
                       className="my-2 p-1 rounded"
-                      style={{ height: '280px', objectFit: 'cover' }}
+                      style={{ height: "280px", objectFit: "cover" }}
                     >
                       <Card.Img
-                        style={{ height: '270px', objectFit: 'contain' }}
+                        style={{ height: "270px", objectFit: "contain" }}
                         src={categoryImage}
                         variant="top"
                       />
@@ -169,7 +179,7 @@ const AddNewCategoryScreen = ({ match, history }) => {
                         <ErrorMessage
                           component="div"
                           className="error text-danger"
-                          name={'image'}
+                          name={"image"}
                         />
                         <i className="bx bx-cloud-upload mx-2"></i>Upload New
                         Image
@@ -207,10 +217,10 @@ const AddNewCategoryScreen = ({ match, history }) => {
                       onChange={(d) => {
                         active.checked === true ? (d = false) : (d = true);
                         setActive({ checked: d });
-                        formik.setFieldValue('isactive', d);
+                        formik.setFieldValue("isactive", d);
                       }}
                     />
-                  
+
                     <label
                       class="form-check-label"
                       for="flexSwitchCheckDefault"

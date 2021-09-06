@@ -11,6 +11,7 @@ import { deleteCategory, getCategory } from "../../actions/categoryActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import debounce from "lodash.debounce";
+import checkPermission from "./checkpermission";
 
 const CategoryScreen = ({ history }) => {
   const [inputValue, setInputValue] = useState("");
@@ -130,7 +131,10 @@ const CategoryScreen = ({ history }) => {
                                 cursor: "pointer",
                                 color: "red",
                               }}
-                              onClick={() => deleteCategoryHandler(item.id)}
+                              onClick={() => {
+                                checkPermission(history, "category.delete");
+                                deleteCategoryHandler(item.id);
+                              }}
                             ></i>
                           </div>
                         </td>

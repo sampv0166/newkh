@@ -13,8 +13,10 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 
 import CheckboxGroup from "../components/CheckboxGroup";
+import checkPermission, { checkPermissionOnSubmit } from "./checkpermission";
 const AddNewShopScreen = ({ match, history }) => {
   const [currentShop, setCurrentShop] = useState([]);
+  const [shopCoverImage, setShopCoverImage] = useState([]);
   const [shopBannerImage, setShopBannerImage] = useState([]);
   const [open, setopen] = useState({ checked: false });
   const [active, setActive] = useState({ checked: false });
@@ -41,16 +43,28 @@ const AddNewShopScreen = ({ match, history }) => {
   const handleImageChange = (e, formik) => {
     if (e.target.files) {
       const U = URL.createObjectURL(e.target.files[0]);
-      setShopBannerImage(U);
+      setShopCoverImage(U);
       URL.revokeObjectURL(e.target.files);
     }
 
     formik.setFieldValue("image", e.currentTarget.files[0]);
   };
 
+  const handleBannerImageChange = (e, formik) => {
+    if (e.target.files) {
+      const U = URL.createObjectURL(e.target.files[0]);
+      setShopBannerImage(U);
+      URL.revokeObjectURL(e.target.files);
+    }
+
+    formik.setFieldValue("bannerimage", e.currentTarget.files[0]);
+  };
+
   useEffect(() => {
     if (shop) {
-      setShopBannerImage(shop.coverimage);
+      
+      setShopCoverImage(shop.coverimage);
+      setShopBannerImage(shop.bannerimage);
       if (shop.open === true) {
         setopen({ checked: true });
       } else {
@@ -67,6 +81,7 @@ const AddNewShopScreen = ({ match, history }) => {
 
   useLayoutEffect(() => {
     dispatch(listShopDetails(shopId));
+    console.log(shop)
   }, [dispatch, shopId]);
 
   const validate = Yup.object({
@@ -78,6 +93,8 @@ const AddNewShopScreen = ({ match, history }) => {
     shop_trn: Yup.string(),
     shop_mob: Yup.string(),
     shop_website: Yup.string(),
+    bannerimage:
+      Yup.mixed().required("required") || Yup.string().required("required"),
   });
 
   const handleSubmit = async (formdata) => {
@@ -111,9 +128,15 @@ const AddNewShopScreen = ({ match, history }) => {
             open: (shop && shop.open) || "",
             isactive: (shop && shop.false) || "",
             name: (shop && shop.name) || "",
+            bannerimage: (shop && shop.bannerimage) || "",
           }}
           validationSchema={validate}
           onSubmit={(values) => {
+            if (checkPermissionOnSubmit("shop.update")) {
+              history.push("/error");
+              return;
+            }
+
             let formdata = new FormData();
 
             if (shopId) {
@@ -129,6 +152,13 @@ const AddNewShopScreen = ({ match, history }) => {
             } else {
               formdata.append("image", values.image);
             }
+
+            if (typeof values.bannerimage === "string") {
+              formdata.delete("banner");
+            } else {
+              formdata.append("banner", values.bannerimage);
+            }
+
             formdata.append("password", values.password);
             formdata.append("shop_trn", values.shop_trn);
             formdata.append("shop_mob", values.shop_mob);
@@ -157,6 +187,67 @@ const AddNewShopScreen = ({ match, history }) => {
           {(formik) => (
             <div>
               <Form>
+                {shopId ? (
+                  <div>
+                    <Card
+                      className="my-2 p-1 rounded"
+                      style={{ height: "280px", objectFit: "cover" }}
+                    >
+                      <Card.Img
+                        style={{ height: "270px", objectFit: "contain" }}
+                        src={shopBannerImage}
+                        variant="top"
+                      />
+                    </Card>
+
+                    <div className="d-flex my-2 ">
+                      <label className="custom-file-upload w-100">
+                        <input
+                          type="file"
+                          onChange={(e) => handleBannerImageChange(e, formik)}
+                          name="image"
+                        />
+                        <ErrorMessage
+                          component="div"
+                          className="error text-danger"
+                          name={"image"}
+                        />
+                        <i className="bx bx-cloud-upload mx-2"></i>Upload Banner
+                        Image
+                      </label>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <Card
+                      className="my-2 p-1 rounded"
+                      style={{ height: "280px", objectFit: "cover" }}
+                    >
+                      <Card.Img
+                        style={{ height: "270px", objectFit: "contain" }}
+                        src={shopBannerImage}
+                        variant="top"
+                      />
+                    </Card>
+
+                    <div className="d-flex my-2 ">
+                      <label className="custom-file-upload w-100">
+                        <input
+                          type="file"
+                          onChange={(e) => handleImageChange(e, formik)}
+                          name="image"
+                        />
+                        <ErrorMessage
+                          component="div"
+                          className="error text-danger"
+                          name={"image"}
+                        />
+                        <i className="bx bx-cloud-upload mx-2"></i>Upload Banner
+                        Image
+                      </label>
+                    </div>
+                  </div>
+                )}
                 <div className="row">
                   <div className="col-md-6">
                     {shopId ? (
@@ -167,7 +258,7 @@ const AddNewShopScreen = ({ match, history }) => {
                         >
                           <Card.Img
                             style={{ height: "270px", objectFit: "contain" }}
-                            src={shopBannerImage}
+                            src={shopCoverImage}
                             variant="top"
                           />
                         </Card>
@@ -185,7 +276,7 @@ const AddNewShopScreen = ({ match, history }) => {
                               name={"image"}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
-                            New Image
+                            Cover Image
                           </label>
                         </div>
                       </div>
@@ -197,7 +288,7 @@ const AddNewShopScreen = ({ match, history }) => {
                         >
                           <Card.Img
                             style={{ height: "270px", objectFit: "contain" }}
-                            src={shopBannerImage}
+                            src={shopCoverImage}
                             variant="top"
                           />
                         </Card>
@@ -215,7 +306,7 @@ const AddNewShopScreen = ({ match, history }) => {
                               name={"image"}
                             />
                             <i className="bx bx-cloud-upload mx-2"></i>Upload
-                            New Image
+                            Cover Image
                           </label>
                         </div>
                       </div>

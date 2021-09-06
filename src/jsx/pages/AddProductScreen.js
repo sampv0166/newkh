@@ -34,6 +34,7 @@ import {
   deleteVariationImage,
   insertSingleVariationImage,
 } from "../../actions/variationActions";
+import checkPermission from "./checkpermission";
 
 const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   //const [hasVariant, setHasVariant] = useState({ checked: false });
@@ -502,10 +503,16 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   }, [dispatch, productId, product]);
 
   useLayoutEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (!user.user.permissions.includes("product.add")) {
+      history.push("/error");
+    }
+
     if (productId) {
       dispatch(listProductDetails(productId));
     }
-    const user = JSON.parse(localStorage.getItem("userInfo"));
+
     if (userinfo.user.typeofuser === "U") {
       dispatch(listShopDetails(user.user.shop_id));
     }
@@ -765,6 +772,11 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
             innerRef={submitform}
             validationSchema={validate()}
             onSubmit={(values, { resetForm }) => {
+              if (!userinfo.user.permissions.includes("product.update")) {
+                history.push("/error");
+                return;
+              }
+
               handleformdata(values, 1);
             }}
           >
@@ -908,14 +920,18 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
 
                 <div className="d-flex justify-content-end my-5">
                   {productId ? (
-                    <div>
-                      <button
-                        className="text-nowrap btn btn-outline-danger mx-2 rounded p-3 my-2"
-                        onClick={(e) => deleteProductHandler(e, productId)}
-                      >
-                        Delete Product
-                      </button>
-                    </div>
+                    userinfo.user.permissions.includes("product.delete") ? (
+                      <div>
+                        <button
+                          className="text-nowrap btn btn-outline-danger mx-2 rounded p-3 my-2"
+                          onClick={(e) => deleteProductHandler(e, productId)}
+                        >
+                          Delete Product
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )
                   ) : (
                     ""
                   )}
@@ -926,7 +942,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                         className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
                         onClick={(e) => {
                           e.preventDefault();
-
+                          checkPermission(history, "variation.add");
                           if (ProductVariationList.length === 0) {
                             setShowOptions(true);
                           } else {
@@ -970,6 +986,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
               varId={varId}
               setVarId={setVarId}
               product={product}
+              history={history}
             />
           ) : (
             ""

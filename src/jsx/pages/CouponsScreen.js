@@ -3,25 +3,31 @@ import { Button, Card, Table } from "react-bootstrap";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getCoupons } from "../../actions/couponsActions";
+import { deleteCoupon, getCoupons } from "../../actions/couponsActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { checkPermissionOnSubmit } from "./checkpermission";
 
 const CouponsScreen = ({ history }) => {
   const couponsList = useSelector((state) => state.couponsList);
   const { loading, error: couponsError, coupons } = couponsList;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCoupons());
+    dispatch(getCoupons(""));
   }, [dispatch]);
 
   const deleteCouponHandler = async (id) => {
     let formdata = new FormData();
     formdata.set("id", id);
     if (window.confirm("Are you sure")) {
-      //dispatch(deleteCoupon(id, dispatch));
+      dispatch(deleteCoupon(formdata, dispatch));
     }
+  };
+
+  const clickHandler = (id) => {
+    history.push(`/coupon/edit/${id}`);
   };
 
   return (
@@ -34,8 +40,8 @@ const CouponsScreen = ({ history }) => {
         <div>
           <div className="d-flex justify-content-between my-4">
             <div>
-              <Link to="/category/addcategory">
-                <Button variant="secondary mb-2">Add New Category</Button>
+              <Link to="/addnewcoupon">
+                <Button variant="secondary mb-2">Add New Coupon</Button>
               </Link>
             </div>
           </div>
@@ -46,10 +52,13 @@ const CouponsScreen = ({ history }) => {
                 <thead>
                   <tr>
                     <th> Id</th>
-                    <th> Name</th>
-                    <th> Image</th>
+                    <th> Code</th>
+                    <th> Description</th>
+                    <th> Value</th>
+                    <th> Expired</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {coupons &&
                     coupons.map((item, index) => (
@@ -59,7 +68,7 @@ const CouponsScreen = ({ history }) => {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            history.push(`/category/addcategory/${item.id}`);
+                            clickHandler(item.id);
                           }}
                         >
                           {item.id}
@@ -69,28 +78,43 @@ const CouponsScreen = ({ history }) => {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            history.push(`/category/addcategory/${item.id}`);
+                            clickHandler(item.id);
                           }}
                         >
-                          {item.name || item.name_en}
+                          {item.code}
                         </td>
+
                         <td
                           style={{
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            history.push(`/category/addcategory/${item.id}`);
+                            clickHandler(item.id);
                           }}
                         >
-                          <Card.Img
-                            style={{
-                              height: "80px",
-                              width: "80px",
-                              objectFit: "contain",
-                            }}
-                            src={item.fullimageurl}
-                            variant="top"
-                          />
+                          {item.description_en}
+                        </td>
+
+                        <td
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            clickHandler(item.id);
+                          }}
+                        >
+                          {item.value}
+                        </td>
+
+                        <td
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            clickHandler(item.id);
+                          }}
+                        >
+                          {item.expired_at}
                         </td>
 
                         <td>
@@ -101,7 +125,13 @@ const CouponsScreen = ({ history }) => {
                                 cursor: "pointer",
                                 color: "red",
                               }}
-                              onClick={() => deleteCouponHandler(item.id)}
+                              onClick={() => {
+                                if (checkPermissionOnSubmit("coupon.update")) {
+                                  history.push("/error");
+                                  return;
+                                }
+                                deleteCouponHandler(item.id);
+                              }}
                             ></i>
                           </div>
                         </td>

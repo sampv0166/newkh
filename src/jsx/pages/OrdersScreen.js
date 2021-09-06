@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { listOrders, updateOrderStatus } from "../../actions/orderActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import checkPermission from "./checkpermission";
 
 const OrdersScreen = ({ match, history }) => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const OrdersScreen = ({ match, history }) => {
       ) : (
         <div>
           <Nav>{pag("", true, "danger", true, false)}</Nav>
-          <Card>
+          <Card className = 'my-3'> 
             <Card.Header>
               <Card.Title></Card.Title>
             </Card.Header>
@@ -152,8 +153,10 @@ const OrdersScreen = ({ match, history }) => {
                         <Dropdown
                           style={{
                             position: "relative",
-
                             marginBottom: "10px",
+                          }}
+                          onClick={() => {
+                            checkPermission(history, "orders.update");
                           }}
                         >
                           <div>
