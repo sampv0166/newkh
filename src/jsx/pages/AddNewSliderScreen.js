@@ -22,6 +22,7 @@ import {
 } from "../../actions/sliderActions";
 import { listProducts } from "../../actions/productActions";
 import Select from "react-select";
+import { getAllShops, listShops } from "../../actions/shopActions";
 
 const AddNewSliderScreen = ({ match, history }) => {
   const [sliderImage, setSliderImage] = useState([]);
@@ -44,8 +45,8 @@ const AddNewSliderScreen = ({ match, history }) => {
     pages,
   } = productList;
 
-  const categoryList = useSelector((state) => state.categoryList);
-  const { loading: loadingCategory, categoryError, category } = categoryList;
+  const allshops = useSelector((state) => state.allshops);
+  const { loading: shoploading, shopError, shops } = allshops;
 
   const populateOptions = () => {
     let objects = [products.length];
@@ -57,15 +58,17 @@ const AddNewSliderScreen = ({ match, history }) => {
     return objects;
   };
 
-  const populatecategoryOptions = () => {
-    let objects = [category.length];
-    for (var x = 0; x < category.length; x++) {
-      objects[x] = { value: category[x].id, label: category[x].name };
+  
+  const populateshopOptions = () => {
+    let objects = [shops.length];
+    for (var x = 0; x < shops.length; x++) {
+      objects[x] = { value: shops[x].id, label: shops[x].shop_name_en };
     }
     console.log(objects);
-
     return objects;
   };
+
+
 
   const sliderCreate = useSelector((state) => state.sliderCreate);
   const { loading: loadingcreate, error: errorcreate } = sliderCreate;
@@ -101,7 +104,7 @@ const AddNewSliderScreen = ({ match, history }) => {
   useLayoutEffect(() => {
     //checkPermission(history, "category.add");
     dispatch(listProducts);
-    dispatch(getCategory());
+    dispatch(getAllShops());
     dispatch(listSliderDetails(sliderId));
     populateOptions();
   }, [dispatch, sliderId]);
@@ -262,13 +265,12 @@ const AddNewSliderScreen = ({ match, history }) => {
                     <div className="col-md-4">
                       <label>Link To Shop</label>
                       <Select
-                        options={populatecategoryOptions()}
+                        options={populateshopOptions()}
                         name="shop_id"
                         placeholder="Search Shop"
                         onChange={(e) => {
                           formik.setFieldValue("shop_id", e.value);
                         }}
-                        isLoading="true"
                       />
                     </div>
                   </div>

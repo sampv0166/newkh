@@ -36,7 +36,6 @@ const SliderScreen = ({ history }) => {
     }
   };
 
-
   return (
     <>
       {loading || loadingDelete ? (
@@ -56,207 +55,157 @@ const SliderScreen = ({ history }) => {
             <Card.Body>
               <Table responsive className="header-border ">
                 <thead>
-                  <tr>
+                  <tr >
                     <th> Id</th>
-                    <th> Image</th>
+                    <th> Images</th>
                     <th> Aspect Ratio</th>
                     <th> Location</th>
-                    <th> Prod Id</th>
-                    <th> Category Id</th>
+  
                   </tr>
                 </thead>
                 <tbody>
-                  {sliders &&
-                    sliders.bottom &&
-                    sliders.bottom.map((item, index) => (
-                      <tr>
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.id}
-                        </td>
+                  {sliders && sliders.bottom && (
+                    <tr >
+                      <td
+                        style={{
+                          cursor: "pointer",
+                          height:'100px'
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.bottom[0].id}`);
+                        }}
+                      >
+                        {sliders.bottom[0].id}
+                      </td>
 
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          <Card.Img
+                      {sliders.bottom &&
+                        sliders.bottom.map((item, index) => {
+                          return (
+                            <span className="mx-4 my-4">
+                              <Card.Img
+                                style={{
+                                  height: "50px",
+                                  width: "50px",
+                                  objectFit: "contain",
+                                }}
+                                src={item.fullurl}
+                                variant="top"
+                              />
+                            </span>
+                          );
+                        })}
+
+                      <td
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.bottom[0].id}`);
+                        }}
+                      >
+                        {sliders.bottom[0].aspectratio}
+                      </td>
+
+                      <td
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.bottom[0].id}`);
+                        }}
+                      >
+                        {"Bottom"}
+                      </td>
+
+                     
+
+                      <td>
+                        <div className="d-flex justify-content-around">
+                          <i
+                            className="fa fa-trash"
                             style={{
-                              height: "200px",
-                              width: "auto",
-                              objectFit: "contain",
+                              cursor: "pointer",
+                              color: "red",
                             }}
-                            src={item.fullurl}
-                            variant="top"
-                          />
-                        </td>
+                            onClick={() => {
+                              checkPermission(history, "category.delete");
+                              deleteSliderHandler(sliders.bottom[0].id);
+                            }}
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {sliders && sliders.top && (
+                    <tr>
+                      <td
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.top[0].id}`);
+                        }}
+                      >
+                        {sliders.top[0].id}
+                      </td>
 
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.aspectratio}
-                        </td>
+                      {sliders.top &&
+                        sliders.top.map((item, index) => {
+                          return (
+                            <span className="mx-4 my-3 h-auto">
+                              <Card.Img
+                                style={{
+                                  height: "50px",
+                                  width: "50px",
+                                  objectFit: "contain",
+                                }}
+                                src={item.fullurl}
+                                variant="top"
+                              />
+                            </span>
+                          );
+                        })}
 
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {"Bottom"}
-                        </td>
+                      <td
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.top[0].id}`);
+                        }}
+                      >
+                        {sliders.top[0].aspectratio}
+                      </td>
 
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.pid}
-                        </td>
+                      <td
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          history.push(`/slider/edit/${sliders.top[0].id}`);
+                        }}
+                      >
+                        {"top"}
+                      </td>
 
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.category_id}
-                        </td>
-
-                        <td>
-                          <div className="d-flex justify-content-around">
-                            <i
-                              className="fa fa-trash"
-                              style={{
-                                cursor: "pointer",
-                                color: "red",
-                              }}
-                              onClick={() => {
-                                checkPermission(history, "category.delete");
-                                deleteSliderHandler(item.id);
-                              }}
-                            ></i>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-
-                  {sliders &&
-                    sliders.top &&
-                    sliders.top.map((item, index) => (
-                      <tr>
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.id}
-                        </td>
-
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          <Card.Img
+                     
+                      <td>
+                        <div className="d-flex justify-content-around">
+                          <i
+                            className="fa fa-trash"
                             style={{
-                              height: "200px",
-                              width: "auto",
-                              objectFit: "contain",
+                              cursor: "pointer",
+                              color: "red",
                             }}
-                            src={item.fullurl}
-                            variant="top"
-                          />
-                        </td>
-
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.aspectratio}
-                        </td>
-
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {"Top"}
-                        </td>
-
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.pid}
-                        </td>
-
-                        <td
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            history.push(`/slider/edit/${item.id}`);
-                          }}
-                        >
-                          {item.category_id}
-                        </td>
-
-                        <td>
-                          <div className="d-flex justify-content-around">
-                            <i
-                              className="fa fa-trash"
-                              style={{
-                                cursor: "pointer",
-                                color: "red",
-                              }}
-                              onClick={() => {
-                                checkPermission(history, "category.delete");
-                                deleteSliderHandler(item.id);
-                              }}
-                            ></i>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                            onClick={() => {
+                              checkPermission(history, "category.delete");
+                              deleteSliderHandler(sliders.top[0].id);
+                            }}
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card.Body>
