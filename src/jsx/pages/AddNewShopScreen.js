@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Image, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createShop,
@@ -62,7 +62,6 @@ const AddNewShopScreen = ({ match, history }) => {
 
   useEffect(() => {
     if (shop) {
-      
       setShopCoverImage(shop.coverimage);
       setShopBannerImage(shop.bannerimage);
       if (shop.open === true) {
@@ -81,7 +80,7 @@ const AddNewShopScreen = ({ match, history }) => {
 
   useLayoutEffect(() => {
     dispatch(listShopDetails(shopId));
-    console.log(shop)
+    console.log(shop);
   }, [dispatch, shopId]);
 
   const validate = Yup.object({
@@ -252,17 +251,13 @@ const AddNewShopScreen = ({ match, history }) => {
                   <div className="col-md-6">
                     {shopId ? (
                       <div>
-                        <Card
-                          className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
-                        >
-                          <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                        <div className="d-flex justify-content-center">
+                          <Image
                             src={shopCoverImage}
-                            variant="top"
+                            style={{ height: "270px", objectFit: "contain" }}
+                            roundedCircle
                           />
-                        </Card>
-
+                        </div>
                         <div className="d-flex my-2 ">
                           <label className="custom-file-upload w-100">
                             <input
@@ -282,16 +277,13 @@ const AddNewShopScreen = ({ match, history }) => {
                       </div>
                     ) : (
                       <div>
-                        <Card
-                          className="my-2 p-1 rounded"
-                          style={{ height: "280px", objectFit: "cover" }}
-                        >
-                          <Card.Img
-                            style={{ height: "270px", objectFit: "contain" }}
+                        <div className="d-flex justify-content-center">
+                          <Image
                             src={shopCoverImage}
-                            variant="top"
+                            style={{ height: "270px", objectFit: "contain" }}
+                            roundedCircle
                           />
-                        </Card>
+                        </div>
 
                         <div className="d-flex my-2 ">
                           <label className="custom-file-upload w-100">

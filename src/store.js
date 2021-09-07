@@ -15,6 +15,7 @@ import {
   productDetailsReducer,
   productListReducer,
   productUpdateReducer,
+  searchedProductsReducer,
   searchProductReducer,
 } from "./reducers/productReducers";
 import {
@@ -52,6 +53,12 @@ import {
   couponDetailsReducer,
   couponsListReducer,
 } from "./reducers/couponsListReducer";
+import {
+  sliderCreateReducer,
+  sliderDeleteReducer,
+  sliderDetailsReducer,
+  sliderListReducer,
+} from "./reducers/sliderReducers";
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -68,6 +75,7 @@ const reducer = combineReducers({
 
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
+  searchedProducts: searchedProductsReducer,
 
   variationCreate: variationCreateReducer,
   variationDelete: variationDeleteReducer,
@@ -98,16 +106,25 @@ const reducer = combineReducers({
   couponsList: couponsListReducer,
   couponDetails: couponDetailsReducer,
   couponCreate: couponCreateReducer,
-  couponDelete : couponDeleteReducer
+  couponDelete: couponDeleteReducer,
+
+  sliderList: sliderListReducer,
+  sliderDetails: sliderDetailsReducer,
+  sliderCreate: sliderCreateReducer,
+  sliderDelete: sliderDeleteReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+const hasVariantFromStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
+  : null;
+
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  hasvariant: false,
+  hasvariant: { hasVariantFromStorage },
 };
 
 const middleware = [thunk];

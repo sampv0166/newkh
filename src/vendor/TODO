@@ -17,3 +17,5 @@ setting shop as inactive(status) still shows in mobile app
 
 orders not showing for admin 
 
+{{baseurl}}/api/v2/public/searchprodandshops?search=''
+

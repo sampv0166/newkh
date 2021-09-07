@@ -113,6 +113,8 @@ import Loader from "./components/Loader";
 import Message from "./components/Message";
 import CouponsScreen from "./pages/CouponsScreen";
 import AddNewCouponscreen from "./pages/AddNewCouponscreen";
+import SliderScreen from "./pages/SliderScreen";
+import AddNewSliderScreen from "./pages/AddNewSliderScreen";
 
 const Markup = ({ history }) => {
   const [hasVariant, setHasVariant] = useState({ checked: false });
@@ -401,6 +403,42 @@ const Markup = ({ history }) => {
                 path="/coupon/edit/:id"
                 render={({ match, history, location }) => (
                   <AddNewCouponscreen
+                    match={match}
+                    history={history}
+                    location={location}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
+                path="/sliders"
+                render={({ match, history, location }) => (
+                  <SliderScreen
+                    match={match}
+                    history={history}
+                    location={location}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
+                path="/addnewslider"
+                render={({ match, history, location }) => (
+                  <AddNewSliderScreen
+                    match={match}
+                    history={history}
+                    location={location}
+                  />
+                )}
+              ></PrivateRoute>
+
+              <PrivateRoute
+                exact
+                path="/slider/edit/:id"
+                render={({ match, history, location }) => (
+                  <AddNewSliderScreen
                     match={match}
                     history={history}
                     location={location}

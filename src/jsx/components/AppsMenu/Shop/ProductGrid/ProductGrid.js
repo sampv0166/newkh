@@ -42,6 +42,9 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, page, pages } = productList;
 
+
+  
+
   const productDetails = useSelector((state) => state.productDetails);
   const { loading: productDetailsLoading, error: errorProductLoading } =
     productDetails;

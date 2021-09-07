@@ -14,6 +14,9 @@ import {
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
+  SEARCHED_PRODUCT_FAIL,
+  SEARCHED_PRODUCT_REQUEST,
+  SEARCHED_PRODUCT_SUCCESS,
   SEARCH_PRODUCT_FAIL,
   SEARCH_PRODUCT_REQUEST,
   SEARCH_PRODUCT_SUCCESS,
@@ -51,6 +54,23 @@ export const searchProductReducer = (state = { products: [] }, action) => {
         page: action.payload.current_page,
       };
     case SEARCH_PRODUCT_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const searchedProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case SEARCHED_PRODUCT_REQUEST:
+      return { loading: true, products: [] };
+
+    case SEARCHED_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.data,
+      };
+    case SEARCHED_PRODUCT_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
