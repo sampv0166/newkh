@@ -3069,9 +3069,10 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #212529;
-  background-color: #6cc51d;
+  background-color:var(--kprimary);
   border-color: #6cc51d;
 }
+
 .btn-primary:hover {
   color: #fff;
   background-color: #5aa418;
@@ -3105,8 +3106,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
   color: #fff;
-  background-color: #c046d3;
-  border-color: #c046d3;
+  background-color: var(--kprimary);
+  border-color: var(--kprimary);
 }
 .btn-secondary:hover {
   color: #fff;
@@ -3418,8 +3419,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-success {
-  color: #37d1bf;
-  border-color: #37d1bf;
+  color: var(--kprimary);
+  border-color: var(--kprimary);
 }
 .btn-outline-success:hover {
   color: #212529;
@@ -11289,7 +11290,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #6cc51d !important;
+  color: var(--kprimary) !important;
 }
 
 a.text-primary:hover,
@@ -40190,8 +40191,8 @@ code {
   color: #fff;
 }
 .pagination .page-item.active .page-link {
-  background: #6cc51d;
-  border-color: #6cc51d;
+  background: var(--kprimary);
+  border-color: var(--kprimary);
   color: #fff;
 }
 
@@ -40233,8 +40234,8 @@ code {
   border-color: #6cc51d;
 }
 .pagination .page-item.active .page-link {
-  background-color: #6cc51d;
-  border-color: #6cc51d;
+  background-color: var(--kprimary);
+  border-color: var(--kprimary);
   color: #fff;
   box-shadow: 0 10px 20px 0px rgba(108, 197, 29, 0.2);
 }
@@ -40330,10 +40331,11 @@ code {
   color: #fff;
 }
 .pagination-danger .page-item .page-link {
-  background: #ffeaef;
-  border-color: #ffeaef;
-  color: #ff285c;
+  background: #ffffff;
+  border-color: #e0a8ce;
+  color: #e0bdeb;
 }
+
 [data-theme-version="dark"] .pagination-danger .page-item .page-link {
   background: rgba(255, 40, 92, 0.15);
   border-color: transparent;
@@ -40341,8 +40343,8 @@ code {
 }
 .pagination-danger .page-item:hover .page-link,
 .pagination-danger .page-item.active .page-link {
-  background: #ff285c;
-  border-color: #ff285c;
+  background: var(--kprimary);
+  border-color: var(--kprimary);
   box-shadow: 0 10px 20px 0px rgba(255, 40, 92, 0.2);
 }
 [data-theme-version="dark"] .pagination-danger .page-item:hover .page-link,

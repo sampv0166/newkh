@@ -5,7 +5,7 @@ const TextField = ({ label, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 form-group">
       <label htmlFor={field.name}>{label}</label>
       <input
         className={`form-control shadow-none rounded ${
