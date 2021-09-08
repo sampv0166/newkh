@@ -618,30 +618,26 @@ const AddProductScreen = ({ history, match }) => {
 
   const handleSubmit = async (formdata, arr, resetForm, values) => {
     const s = ProductVariationList;
-    if (s.length === 0) {
-      alert("Add atleast one variation, Image Required");
-    } else {
-      await dispatch(
-        createProduct(
-          dispatch,
-          formdata,
-          arr,
-          ProductVariationList,
-          productId,
-          varId,
-          values,
-          deleteimageurl
-        )
-      );
+    await dispatch(
+      createProduct(
+        dispatch,
+        formdata,
+        arr,
+        ProductVariationList,
+        productId,
+        varId,
+        values,
+        deleteimageurl
+      )
+    );
 
-      await dispatch(listProducts(1));
+    await dispatch(listProducts(1));
 
-      setProductVariationList([]);
+    setProductVariationList([]);
 
-      setProductImageURL(null);
+    setProductImageURL(null);
 
-      history.goBack();
-    }
+    history.goBack();
   };
 
   const productCreate = useSelector((state) => state.productCreate);
