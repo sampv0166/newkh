@@ -96,6 +96,26 @@ const AddNewShopScreen = ({ match, history }) => {
       Yup.mixed().required("required") || Yup.string().required("required"),
   });
 
+  const validateWithoutPassword = Yup.object({
+    shop_name_en: Yup.string().required("Required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
+    image:
+      Yup.mixed().required("required") || Yup.string().required("required"),
+    shop_trn: Yup.string(),
+    shop_mob: Yup.string(),
+    shop_website: Yup.string(),
+    bannerimage:
+      Yup.mixed().required("required") || Yup.string().required("required"),
+  });
+
+  const validateform = () => {
+    if (shopId) {
+      return validateWithoutPassword;
+    } else {
+      return validate;
+    }
+  };
+
   const handleSubmit = async (formdata) => {
     dispatch(createShop(dispatch, formdata));
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -120,6 +140,7 @@ const AddNewShopScreen = ({ match, history }) => {
             shop_name_en: (shop && shop.shop_name_en) || "",
             email: (shop && shop.shop_email) || "",
             image: (shop && shop.coverimage) || "",
+            bannerimage: (shop && shop.bannerimage) || "",
             password: "",
             shop_trn: (shop && shop.shop_trn) || "",
             shop_mob: (shop && shop.shop_mob) || "",
@@ -127,9 +148,8 @@ const AddNewShopScreen = ({ match, history }) => {
             open: (shop && shop.open) || "",
             isactive: (shop && shop.false) || "",
             name: (shop && shop.name) || "",
-            bannerimage: (shop && shop.bannerimage) || "",
           }}
-          validationSchema={validate}
+          validationSchema={validateform}
           onSubmit={(values) => {
             if (checkPermissionOnSubmit("shop.update")) {
               history.push("/error");
@@ -204,12 +224,12 @@ const AddNewShopScreen = ({ match, history }) => {
                         <input
                           type="file"
                           onChange={(e) => handleBannerImageChange(e, formik)}
-                          name="image"
+                          name="bannerimage"
                         />
                         <ErrorMessage
                           component="div"
                           className="error text-danger"
-                          name={"image"}
+                          name={"bannerimage"}
                         />
                         <i className="bx bx-cloud-upload mx-2"></i>Upload Banner
                         Image
@@ -233,13 +253,13 @@ const AddNewShopScreen = ({ match, history }) => {
                       <label className="custom-file-upload w-100">
                         <input
                           type="file"
-                          onChange={(e) => handleImageChange(e, formik)}
-                          name="image"
+                          onChange={(e) => handleBannerImageChange(e, formik)}
+                          name="bannerimage"
                         />
                         <ErrorMessage
                           component="div"
                           className="error text-danger"
-                          name={"image"}
+                          name={"bannerimage"}
                         />
                         <i className="bx bx-cloud-upload mx-2"></i>Upload Banner
                         Image
@@ -314,13 +334,17 @@ const AddNewShopScreen = ({ match, history }) => {
                           type="text"
                         />
                       </div>
-                      <div className="col-md-6">
-                        <TextField
-                          label="Password"
-                          name="password"
-                          type="password"
-                        />
-                      </div>
+                      {shopId ? (
+                        ""
+                      ) : (
+                        <div className="col-md-6">
+                          <TextField
+                            label="Password"
+                            name="password"
+                            type="password"
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="row g-3">
@@ -353,7 +377,7 @@ const AddNewShopScreen = ({ match, history }) => {
                       </div>
                     </div>
                     <Row>
-                      <Col className="col-3">
+                      {/*<Col className="col-3">
                         <div class="form-check form-switch">
                           <input
                             class="form-check-input"
@@ -375,7 +399,7 @@ const AddNewShopScreen = ({ match, history }) => {
                             Active
                           </label>
                         </div>
-                      </Col>
+                          </Col>*/}
 
                       {
                         <Col className="col-3">
@@ -402,14 +426,13 @@ const AddNewShopScreen = ({ match, history }) => {
                           </div>
                         </Col>
                       }
-                      <Col className="col-6">
-                        <button
-                          className="btn btn-success mt-3 my-2 w-100"
-                          type="submit"
-                        >
-                          Save
-                        </button>
-                      </Col>
+
+                      <button
+                        className="btn btn-success mt-3 w-100"
+                        type="submit"
+                      >
+                        Save
+                      </button>
                     </Row>
                   </div>
                 </div>

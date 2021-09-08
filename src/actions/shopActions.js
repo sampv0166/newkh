@@ -44,7 +44,7 @@ export const listShops = (pageNumber, history, keyword) => async (dispatch) => {
       dispatch({ type: SHOP_REQUEST });
 
       const { data } = await axios.get(
-        `${BASE_URL}api/v2/public/shop?page=${pageNumber}`
+        `${BASE_URL}api/v2/admin/shop?page=${pageNumber}` , config
       );
 
       dispatch({

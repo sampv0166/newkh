@@ -230,16 +230,20 @@ const SideBar = () => {
             </Link>
           </li>
 
-          <li
-            className={`${
-              path.slice(1).includes("sliders") ? "mm-active" : ""
-            }`}
-          >
-            <Link to={`/sliders`} className="ai-icon" aria-expanded="false">
-              <i class="bx bx-carousel"></i>
-              <span className="nav-text">Sliders</span>
-            </Link>
-          </li>
+          {userInfo.user.typeofuser === "S" ? (
+            <li
+              className={`${
+                path.slice(1).includes("sliders") ? "mm-active" : ""
+              }`}
+            >
+              <Link to={`/sliders`} className="ai-icon" aria-expanded="false">
+                <i class="bx bx-carousel"></i>
+                <span className="nav-text">Sliders</span>
+              </Link>
+            </li>
+          ) : (
+            ""
+          )}
 
           {/*<li className={`${app.includes(path.slice(1)) ? "mm-active" : ""}`}>
             <Link className="has-arrow ai-icon" to="#" aria-expanded="false">

@@ -410,41 +410,53 @@ const Markup = ({ history }) => {
                 )}
               ></PrivateRoute>
 
-              <PrivateRoute
-                exact
-                path="/sliders"
-                render={({ match, history, location }) => (
-                  <SliderScreen
-                    match={match}
-                    history={history}
-                    location={location}
-                  />
-                )}
-              ></PrivateRoute>
+              {userInfo && userInfo.user && userInfo.user.typeofuser === "S" ? (
+                <PrivateRoute
+                  exact
+                  path="/sliders"
+                  render={({ match, history, location }) => (
+                    <SliderScreen
+                      match={match}
+                      history={history}
+                      location={location}
+                    />
+                  )}
+                ></PrivateRoute>
+              ) : (
+                ""
+              )}
 
-              <PrivateRoute
-                exact
-                path="/addnewslider"
-                render={({ match, history, location }) => (
-                  <AddNewSliderScreen
-                    match={match}
-                    history={history}
-                    location={location}
-                  />
-                )}
-              ></PrivateRoute>
+              {userInfo && userInfo.user &&  userInfo.user.typeofuser === "S" ? (
+                <PrivateRoute
+                  exact
+                  path="/addnewslider"
+                  render={({ match, history, location }) => (
+                    <AddNewSliderScreen
+                      match={match}
+                      history={history}
+                      location={location}
+                    />
+                  )}
+                ></PrivateRoute>
+              ) : (
+                ""
+              )}
 
-              <PrivateRoute
-                exact
-                path="/slider/edit/:id"
-                render={({ match, history, location }) => (
-                  <AddNewSliderScreen
-                    match={match}
-                    history={history}
-                    location={location}
-                  />
-                )}
-              ></PrivateRoute>
+              {userInfo && userInfo.user && userInfo.user.typeofuser === "S" ? (
+                <PrivateRoute
+                  exact
+                  path="/slider/edit/:id"
+                  render={({ match, history, location }) => (
+                    <AddNewSliderScreen
+                      match={match}
+                      history={history}
+                      location={location}
+                    />
+                  )}
+                ></PrivateRoute>
+              ) : (
+                ""
+              )}
 
               <PrivateRoute
                 exact

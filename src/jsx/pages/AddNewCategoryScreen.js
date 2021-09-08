@@ -108,10 +108,14 @@ const AddNewCategoryScreen = ({ match, history }) => {
             formdata.append("name_en", values.name_en);
             formdata.append("name_ar", values.name_ar);
 
-            if (values.isactive === true) {
-              formdata.append("active", 1);
+            if (categoryId) {
+              if (values.isactive === true) {
+                formdata.append("active", 1);
+              } else {
+                formdata.append("active", 0);
+              }
             } else {
-              formdata.append("active", 0);
+              formdata.append("active", 1);
             }
 
             if (typeof values.image === "string") {
@@ -208,26 +212,31 @@ const AddNewCategoryScreen = ({ match, history }) => {
                     </div>
                   </div>
 
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault"
-                      checked={active.checked}
-                      onChange={(d) => {
-                        active.checked === true ? (d = false) : (d = true);
-                        setActive({ checked: d });
-                        formik.setFieldValue("isactive", d);
-                      }}
-                    />
+                  {categoryId ? (
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                        checked={active.checked}
+                        onChange={(d) => {
+                          active.checked === true ? (d = false) : (d = true);
+                          setActive({ checked: d });
+                          formik.setFieldValue("isactive", d);
+                        }}
+                      />
 
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault"
-                    >
-                      Active Status
-                    </label>
-                  </div>
+                      <label
+                        class="form-check-label"
+                        for="flexSwitchCheckDefault"
+                      >
+                        Active Status
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
                   <button className="btn btn-success mt-3 my-2" type="submit">
                     Save
                   </button>

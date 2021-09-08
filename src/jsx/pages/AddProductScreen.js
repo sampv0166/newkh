@@ -577,18 +577,21 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     if (userinfo.user.typeofuser === "A" || userinfo.user.typeofuser === "U") {
       formdata.append("shop_id", shop.id);
     }
-
-    //formdata.append('offerprice', values.offerprice);
+    values.bestseller === true
+      ? formdata.append("bestseller", 1)
+      : formdata.append("bestseller", 0);
 
     values.special === true
       ? formdata.append("special", 1)
       : formdata.append("special", 0);
-    values.isactive === true
-      ? formdata.append("isactive", 1)
-      : formdata.append("isactive", 0);
-    values.bestseller === true
-      ? formdata.append("bestseller", 1)
-      : formdata.append("bestseller", 0);
+    //formdata.append('offerprice', values.offerprice);
+    if (productId) {
+      values.isactive === true
+        ? formdata.append("isactive", 1)
+        : formdata.append("isactive", 0);
+    } else {
+      formdata.append("isactive", 1);
+    }
   };
 
   const handleformdata = (values, resetForm) => {
@@ -861,25 +864,29 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                 {renderPriceStock(formik)}
 
                 <Row>
-                  <Col>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="Active"
-                        checked={active.checked}
-                        onChange={(d) => {
-                          active.checked === true ? (d = false) : (d = true);
-                          setActive({ checked: d });
-                          formik.setFieldValue("isactive", d);
-                        }}
-                      />
+                  {productId ? (
+                    <Col>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="Active"
+                          checked={active.checked}
+                          onChange={(d) => {
+                            active.checked === true ? (d = false) : (d = true);
+                            setActive({ checked: d });
+                            formik.setFieldValue("isactive", d);
+                          }}
+                        />
 
-                      <label className="form-check-label" htmlFor="Active">
-                        Active Status
-                      </label>
-                    </div>
-                  </Col>
+                        <label className="form-check-label" htmlFor="Active">
+                          Active Status
+                        </label>
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
 
                   <Col>
                     <div className="form-check form-switch">

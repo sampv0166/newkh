@@ -98,7 +98,7 @@ const AddNewUserScreen = ({ match, history }) => {
 
   useEffect(() => {
     if (userId && user) {
-      setUserImage(user.photolink);
+      setUserImage(user.photo);
       if (user.permissions && user.permissions.includes("product.add")) {
         setProdadd({ checked: true });
       } else {
@@ -260,6 +260,21 @@ const AddNewUserScreen = ({ match, history }) => {
       .required("Required"),
   });
 
+  const validateWithoutPassword = Yup.object({
+    name: Yup.string()
+      .min(1, "Name must be atleast one character")
+      .required("Required"),
+    email: Yup.string().email("email is invalid").required("Required"),
+  });
+
+  const validateform = () => {
+    if (userId) {
+      return validateWithoutPassword;
+    } else {
+      return validate;
+    }
+  };
+
   const handleSubmit = async (formdata, values) => {
     dispatch(createUser(dispatch, formdata, values, userId));
     history.push("/usersList/page/1");
@@ -309,7 +324,7 @@ const AddNewUserScreen = ({ match, history }) => {
             image: "",
             shop_id: (userId && user.shop_id) || "",
           }}
-          validationSchema={validate}
+          validationSchema={validateform}
           onSubmit={(values) => {
             let formdata = new FormData();
 
@@ -433,14 +448,12 @@ const AddNewUserScreen = ({ match, history }) => {
                           style={{
                             height: "280px",
                             objectFit: "cover",
-                            borderRadius: "50%",
                           }}
                         >
                           <Card.Img
                             style={{
                               height: "270px",
                               objectFit: "contain",
-                              borderRadius: "50%",
                             }}
                             src={userImage}
                             variant="top"
@@ -472,14 +485,12 @@ const AddNewUserScreen = ({ match, history }) => {
                           style={{
                             height: "280px",
                             objectFit: "cover",
-                            borderRadius: "50%",
                           }}
                         >
                           <Card.Img
                             style={{
                               height: "270px",
                               objectFit: "contain",
-                              borderRadius: "50%",
                             }}
                             src={userImage}
                             variant="top"
