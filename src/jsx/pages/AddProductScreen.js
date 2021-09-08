@@ -36,7 +36,7 @@ import {
 } from "../../actions/variationActions";
 import checkPermission from "./checkpermission";
 
-const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
+const AddProductScreen = ({ history, match }) => {
   //const [hasVariant, setHasVariant] = useState({ checked: false });
   const [ProductVariationList, setProductVariationList] = useState([]);
   const [hasColor, setHasColor] = useState({ checked: false });
@@ -261,7 +261,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   };
 
   const renderPriceStock = (formik) => {
-    return !hasVariant.checked ? (
+    return ProductVariationList.length < 2 ? ( //here
       <>
         <Row>
           <Col className="col-md-6">
@@ -432,7 +432,6 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   };
 
   useEffect(() => {
-    console.log(hasVariant);
     if (category.length === 0) {
       dispatch(getCategory());
     }
@@ -519,7 +518,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
   }, [dispatch, productId]);
 
   const setArr = (arr, values) => {
-    if (hasVariant.checked === false) {
+    if (ProductVariationList.length < 2) {
       arr[0] = {
         price: values.price,
         stocks: values.stocks,
@@ -552,7 +551,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     formdata.append("description_ar", arbicDescription);
     formdata.append("description_en", values.description_en);
 
-    if (hasVariant.checked) {
+    if (ProductVariationList.length > 1) {
       if (ProductVariationList.length > 0) {
         if (typeof ProductVariationList[0].images[0] === "string") {
           formdata.delete("image");
@@ -610,7 +609,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
 
     setArr(arr, values);
     setFormData(formdata, values);
-    if (hasVariant.checked === true) {
+    if (ProductVariationList.length > 1) {
       handleSubmit(formdata, ProductVariationList, resetForm, values);
     } else {
       handleSubmit(formdata, arr, resetForm, values);
@@ -619,7 +618,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
 
   const handleSubmit = async (formdata, arr, resetForm, values) => {
     const s = ProductVariationList;
-    if (hasVariant.checked && s.length === 0) {
+    if (s.length === 0) {
       alert("Add atleast one variation, Image Required");
     } else {
       await dispatch(
@@ -627,7 +626,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
           dispatch,
           formdata,
           arr,
-          hasVariant,
+          ProductVariationList,
           productId,
           varId,
           values,
@@ -685,7 +684,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
     productList;
 
   const validate = () => {
-    if (hasVariant.checked) {
+    if (ProductVariationList.length > 1) {
       return validateWithoutVariation;
     } else {
       if (offer.checked) {
@@ -786,7 +785,7 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
             {(formik) => (
               <Form>
                 <Row className="my-5">
-                  {hasVariant.checked ? (
+                  {ProductVariationList.length > 1 ? (
                     ""
                   ) : (
                     <Col className="w-auto">{renderImageUpload(formik)}</Col>
@@ -943,28 +942,25 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
                     ""
                   )}
 
-                  {hasVariant.checked ? (
-                    <div>
-                      <button
-                        className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          checkPermission(history, "variation.add");
-                          if (ProductVariationList.length === 0) {
-                            setShowOptions(true);
-                          } else {
-                            setShowOptions(false);
-                            setShow(true);
-                            setVarId(0);
-                          }
-                        }}
-                      >
-                        Add New Variation
-                      </button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                  <div>
+                    <button
+                      className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        checkPermission(history, "variation.add");
+                        if (ProductVariationList.length === 0) {
+                          setShowOptions(true);
+                        } else {
+                          setShowOptions(false);
+                          setShow(true);
+                          setVarId(0);
+                        }
+                      }}
+                    >
+                      Add New Variation
+                    </button>
+                  </div>
+
                   <div>
                     <button
                       className="text-nowrap btn btn-outline-success mx-2 rounded p-3 my-2"
@@ -981,10 +977,11 @@ const AddProductScreen = ({ history, match, hasVariant, setHasVariant }) => {
             )}
           </Formik>
 
+          {console.log(ProductVariationList.length)}
+
           {ProductVariationList.length > 0 ? (
             <VariationTable
               setProductVariationList={setProductVariationList}
-              hasVariant={hasVariant}
               ProductVariationList={ProductVariationList}
               hasColor={hasColor}
               hasSize={hasSize}

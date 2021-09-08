@@ -160,7 +160,7 @@ export const createProduct =
     dispatch,
     formdata,
     ProductVariationList,
-    hasVariant,
+    list,
     productId,
     varId,
     values,
@@ -187,22 +187,11 @@ export const createProduct =
         config
       );
 
-      dispatch({
-        type: PRODUCT_CREATE_SUCCESS,
-        payload: data,
-      });
-
       dispatch(listProducts(1));
 
       if (!productId) {
         dispatch(
-          createVariation(
-            dispatch,
-            formdata,
-            ProductVariationList,
-            hasVariant,
-            data
-          )
+          createVariation(dispatch, formdata, ProductVariationList, list, data)
         );
       } else {
         if (varId) {
@@ -238,6 +227,13 @@ export const createProduct =
           );
         }
       }
+
+      dispatch(listProductDetails(productId))
+
+      dispatch({
+        type: PRODUCT_CREATE_SUCCESS,
+        payload: data,
+      });
     } catch (error) {
       const message =
         error.response && error.response.data.error

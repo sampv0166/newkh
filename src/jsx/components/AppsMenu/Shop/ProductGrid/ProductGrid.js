@@ -4,31 +4,31 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import Products from './Products';
-import debounce from 'lodash.debounce';
+} from "react";
+import Products from "./Products";
+import debounce from "lodash.debounce";
 
 /// Data
-import productData from '../productData';
+import productData from "../productData";
 
-import PageTitle from '../../../../layouts/PageTitle';
+import PageTitle from "../../../../layouts/PageTitle";
 
-import { Button, Dropdown, Nav, Pagination } from 'react-bootstrap';
-import Paginate from '../../../Paginate';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Dropdown, Nav, Pagination } from "react-bootstrap";
+import Paginate from "../../../Paginate";
+import { useDispatch, useSelector } from "react-redux";
 import {
   listProductDetails,
   listProducts,
-} from '../../../../../actions/productActions';
-import { Link } from 'react-router-dom';
-import Loader from '../../../Loader';
-import Message from '../../../Message';
-import { Formik } from 'formik';
-import { set } from 'date-fns';
+} from "../../../../../actions/productActions";
+import { Link } from "react-router-dom";
+import Loader from "../../../Loader";
+import Message from "../../../Message";
+import { Formik } from "formik";
+import { set } from "date-fns";
 
-const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
-  const [keyword, setKeyword] = useState('');
-  const [inputValue, setInputValue] = useState('');
+const ProductGrid = ({ match, history }) => {
+  const [keyword, setKeyword] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [all, setAll] = useState({ checked: true });
   const [deleted, setDeleted] = useState({ checked: false });
 
@@ -41,9 +41,6 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, page, pages } = productList;
-
-
-  
 
   const productDetails = useSelector((state) => state.productDetails);
   const { loading: productDetailsLoading, error: errorProductLoading } =
@@ -67,10 +64,8 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   };
 
   useEffect(() => {
-    
     dispatch(listProducts(pageNumber));
     dispatch(listProductDetails(0));
-
   }, [dispatch, pageNumber]);
 
   for (let number = 1; number <= pages; number++) {
@@ -88,9 +83,9 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
   const pag = (size, gutter, variant, bg, circle) => (
     <Pagination
       size={size}
-      className={`mt-4  ${gutter ? 'pagination-gutter' : ''} ${
+      className={`mt-4  ${gutter ? "pagination-gutter" : ""} ${
         variant && `pagination-${variant}`
-      } ${!bg && 'no-bg'} ${circle && 'pagination-circle'}`}
+      } ${!bg && "no-bg"} ${circle && "pagination-circle"}`}
     >
       {items}
     </Pagination>
@@ -158,47 +153,25 @@ const ProductGrid = ({ match, history, hasVariant, setHasVariant }) => {
               <label className="form-check-label">ACTIVE</label>
               </div>*/}
 
-            <div className="basic-dropdown">
-              <Dropdown>
-                <Dropdown.Toggle variant="secondary">
-                  Add Product
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setHasVariant({ checked: false });
-                      history.push('/ecom/addnewproduct');
-                      dispatch(listProductDetails(0));
-                    }}
-                  >
-                    Add New Product
-                  </Dropdown.Item>
-
-                  <Dropdown.Item
-                    onClick={() => {
-                      setHasVariant({ checked: true });
-                      history.push('/ecom/addnewproduct');
-                      dispatch(listProductDetails(0));
-                    }}
-                  >
-                    Add Product With Variants
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+            <div>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  history.push("/ecom/addnewproduct");
+                  dispatch(listProductDetails(0));
+                }}
+              >
+                Add New Product
+              </button>
             </div>
           </div>
 
           <div className="row">
             {products.map((product) => (
-              <Products
-                key={product.key}
-                product={product}
-                setHasVariant={setHasVariant}
-                history={history}
-              />
+              <Products key={product.key} product={product} history={history} />
             ))}
           </div>
-          <Nav>{pag('', true, 'danger', true, false)}</Nav>
+          <Nav>{pag("", true, "danger", true, false)}</Nav>
         </Fragment>
       )}
     </>

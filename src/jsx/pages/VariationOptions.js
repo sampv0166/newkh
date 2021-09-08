@@ -241,11 +241,11 @@ const VariationOptions = ({
           );
           setDeletedimageurl([]);
           dispatch(listProductDetails(productId));
-
           setProductVariationList(product[0].variations);
         } else {
           dispatch(createSingleVariation(dispatch, formdata, productId));
           dispatch(listProductDetails(productId));
+          setProductVariationList(product[0].variations);
         }
       } else {
         addToVariationList(formik);

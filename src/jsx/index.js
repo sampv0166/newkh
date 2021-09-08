@@ -117,8 +117,6 @@ import SliderScreen from "./pages/SliderScreen";
 import AddNewSliderScreen from "./pages/AddNewSliderScreen";
 
 const Markup = ({ history }) => {
-  const [hasVariant, setHasVariant] = useState({ checked: false });
-
   const routes = [
     /// Deshborad
     { url: "/", component: Home },
@@ -253,8 +251,6 @@ const Markup = ({ history }) => {
                     match={match}
                     history={history}
                     location={location}
-                    hasVariant={hasVariant}
-                    setHasVariant={setHasVariant}
                   />
                 )}
               ></PrivateRoute>
@@ -267,8 +263,6 @@ const Markup = ({ history }) => {
                     match={match}
                     history={history}
                     location={location}
-                    hasVariant={hasVariant}
-                    setHasVariant={setHasVariant}
                   />
                 )}
               ></PrivateRoute>
@@ -281,8 +275,6 @@ const Markup = ({ history }) => {
                     match={match}
                     history={history}
                     location={location}
-                    hasVariant={hasVariant}
-                    setHasVariant={setHasVariant}
                   />
                 )}
               ></PrivateRoute>
@@ -295,8 +287,6 @@ const Markup = ({ history }) => {
                     match={match}
                     history={history}
                     location={location}
-                    hasVariant={hasVariant}
-                    setHasVariant={setHasVariant}
                   />
                 )}
               ></PrivateRoute>
@@ -357,7 +347,6 @@ const Markup = ({ history }) => {
                     match={match}
                     history={history}
                     location={location}
-                    setHasVariant={setHasVariant}
                   />
                 )}
               ></PrivateRoute>
@@ -426,7 +415,7 @@ const Markup = ({ history }) => {
                 ""
               )}
 
-              {userInfo && userInfo.user &&  userInfo.user.typeofuser === "S" ? (
+              {userInfo && userInfo.user && userInfo.user.typeofuser === "S" ? (
                 <PrivateRoute
                   exact
                   path="/addnewslider"

@@ -8,7 +8,6 @@ import Message from "../components/Message";
 import checkPermission from "./checkpermission";
 
 const VariationTable = ({
-  hasVariant,
   ProductVariationList,
   setProductVariationList,
   hasColor,
@@ -64,6 +63,22 @@ const VariationTable = ({
     );
   };
 
+  const variationCreate = useSelector((state) => state.variationCreate);
+  const {
+    loading: loadingCreateVariation,
+    error: errorCreateVariation,
+    success: successCreateVariation,
+  } = variationCreate;
+
+  const singleVariationCreate = useSelector(
+    (state) => state.singleVariationCreate
+  );
+  const {
+    loading: loadingSingleCreateVariation,
+    error: errorSingleCreateVariation,
+    success: successSingleCreateVariation,
+  } = singleVariationCreate;
+
   const productDetails = useSelector((state) => state.productDetails);
   const {
     product,
@@ -76,13 +91,21 @@ const VariationTable = ({
 
   return (
     <>
-      {loadingproductDetails ? (
+      {loadingproductDetails ||
+      loadingCreateVariation ||
+      loadingSingleCreateVariation ? (
         <Loader />
-      ) : errorproductDetails ? (
-        <Message>{errorproductDetails}</Message>
+      ) : errorproductDetails ||
+        errorCreateVariation ||
+        loadingSingleCreateVariation ? (
+        <Message>
+          {errorproductDetails ||
+            errorCreateVariation ||
+            loadingSingleCreateVariation}
+        </Message>
       ) : (
         <div>
-          {hasVariant.checked ? (
+          {ProductVariationList.length > 1 ? (
             <Col lg={12}>
               <div className="col-12 my-5 w-100">
                 <Table

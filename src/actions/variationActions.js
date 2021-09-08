@@ -26,7 +26,7 @@ import {
 import { listProductDetails } from "./productActions";
 
 export const createVariation =
-  (dispatch, formdata, ProductVariationList, hasVariant, data) => async () => {
+  (dispatch, formdata, ProductVariationList, list, data) => async () => {
     try {
       let response;
       dispatch({
@@ -61,7 +61,7 @@ export const createVariation =
 
         variationformdata.set("size_value", variations.size_value);
 
-        if (hasVariant) {
+        if (list.length > 1) {
           for (var i = 0; i < arr.length; i++) {
             variationformdata.append(`images[${i}]`, arr[i]);
           }

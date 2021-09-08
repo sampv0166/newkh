@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Products = ({ product, setHasVariant, history }) => {
+const Products = ({ product,  history }) => {
   return (
     <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6">
       <div className="card">
@@ -15,11 +15,8 @@ const Products = ({ product, setHasVariant, history }) => {
                 product.variations[0].color_name === null &&
                 product.variations[0].size_value === null
               ) {
-                setHasVariant({ checked: false });
-              } else {
-                setHasVariant({ checked: true });
-              }
-
+                
+              } 
               history.push(`/ecom/product-edit/${product.id}`);
             }}
             className="new-arrival-product"
